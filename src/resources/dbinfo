@@ -1,0 +1,5 @@
+server = 3.227.166.251
+URL = jdbc:mysql://3.227.166.251/U068US
+database = U068US
+USER = U068US
+PASS = 53688700078

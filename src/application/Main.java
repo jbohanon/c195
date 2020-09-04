@@ -1,6 +1,7 @@
 package application;
 
 import application.dao.Database;
+import application.ui.LoginController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

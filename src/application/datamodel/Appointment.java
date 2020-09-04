@@ -1,6 +1,13 @@
 package application.datamodel;
 
+import application.dao.CustomerDAO;
+import application.dao.UserDAO;
+import application.localization.*;
+
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.EnumSet;
 
 public class Appointment {
@@ -13,8 +20,25 @@ public class Appointment {
     private String _contact;
     private APPT_TYPE _type;
     private String _url;
-    private LocalDateTime _start;
-    private LocalDateTime _end;
+    private ZonedDateTime _start;
+    private ZonedDateTime _end;
+
+    private static final CustomerDAO customerDAO = new CustomerDAO();
+    private static final UserDAO userDAO = new UserDAO();
+
+    public Appointment(int appointmentId, int customerId, int userId, String title, String description, String location, String contact, String type, String url, String start, String end) {
+        _appointmentId = appointmentId;
+        _customer = customerDAO.lookup(customerId).orElse(Customer.nullCustomer());
+        _user = userDAO.lookup(userId).orElse(User.nullUser());
+        _title = title;
+        _description = description;
+        _location = location;
+        _contact = contact;
+        _type = apptTypeFromString(type);
+        _url = url;
+        _start = Localization.getZonedUtcTime(start);
+        _end = Localization.getZonedUtcTime(end);
+    }
 
     public int getAppointmentId() {
         return _appointmentId;
@@ -79,22 +103,39 @@ public class Appointment {
         _url = url;
     }
 
-    public LocalDateTime getStart() {
+    public ZonedDateTime getStart() {
         return _start;
     }
-    public void setStart(LocalDateTime start) {
+    public void setStart(ZonedDateTime start) {
         _start = start;
     }
 
-    public LocalDateTime getEnd() {
+    public ZonedDateTime getEnd() {
         return _end;
     }
-    public void setEnd(LocalDateTime end) {
+    public void setEnd(ZonedDateTime end) {
         _end = end;
     }
 
     public enum APPT_TYPE {
-        TYPE_1, TYPE_2, TYPE_3
+        TYPE_1, TYPE_2, TYPE_3, TYPE_UNKNOWN
     }
 
+    public String apptTypeToString(APPT_TYPE type) {
+        switch (type) {
+            case TYPE_1: return "type_1";
+            case TYPE_2: return "type_2";
+            case TYPE_3: return "type_3";
+            default: return "type_unknown";
+        }
+    }
+
+    public APPT_TYPE apptTypeFromString(String type) {
+        switch (type) {
+            case "type_1": return APPT_TYPE.TYPE_1;
+            case "type_2": return APPT_TYPE.TYPE_2;
+            case "type_3": return APPT_TYPE.TYPE_3;
+            default: return APPT_TYPE.TYPE_UNKNOWN;
+        }
+    }
 }

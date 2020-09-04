@@ -15,31 +15,31 @@ public class AddressDAO implements DAO<Address> {
     @Override
     public Optional<Address> lookup(int addressId) {
         try {
-        Statement stmt = Main.dbConn.createStatement();
-        String s = "SELECT addressId, address, address2, cityId, postalCode, phone FROM address WHERE addressId=" + addressId;
-        System.out.println("Executing " + s);
-        ResultSet rs = stmt.executeQuery(s);
-        if(rs.next()) {
-            Address addr = new Address(
-                    rs.getInt("addressId"),
-                    rs.getString("address"),
-                    rs.getString("address2"),
-                    rs.getInt("cityId"),
-                    rs.getString("postalCode"),
-                    rs.getString("phone"));
-            System.out.println(
-                    "Matched address:\n" +
-                            addr.getAddress() + "\n" +
-                            addr.getAddress2() + "\n" +
-                            addr.getCity().getCity() + ", " +
-                            addr.getCity().getCountry().getCountry() + " " +
-                            addr.getPostalCode() + "\n" +
-                            addr.getPhone());
-            return Optional.of(addr);
+            Statement stmt = Main.dbConn.createStatement();
+            String s = "SELECT addressId, address, address2, cityId, postalCode, phone FROM address WHERE addressId=" + addressId;
+            System.out.println("Executing " + s);
+            ResultSet rs = stmt.executeQuery(s);
+            if(rs.next()) {
+                Address addr = new Address(
+                        rs.getInt("addressId"),
+                        rs.getString("address"),
+                        rs.getString("address2"),
+                        rs.getInt("cityId"),
+                        rs.getString("postalCode"),
+                        rs.getString("phone"));
+                System.out.println(
+                        "Matched address:\n" +
+                                addr.getAddress() + "\n" +
+                                addr.getAddress2() + "\n" +
+                                addr.getCity().getCity() + ", " +
+                                addr.getCity().getCountry().getCountry() + " " +
+                                addr.getPostalCode() + "\n" +
+                                addr.getPhone());
+                return Optional.of(addr);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-    } catch (SQLException ex) {
-        ex.printStackTrace();
-    }
         return Optional.empty();
     }
 

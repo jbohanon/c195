@@ -23,6 +23,13 @@ public class Customer {
         _address = address;
     }
 
+    public Customer() {
+        _customerId = -1;
+        _customerName = "Err";
+        _active = false;
+        _address = Address.nullAddress();
+    }
+
     public int getCustomerId() {
         return _customerId;
     }
@@ -59,6 +66,10 @@ public class Customer {
         _address = address;
     }
 
+    public static Customer nullCustomer() {
+        return new Customer();
+    }
+}
 //    public static ArrayList<Customer> searchCustomer(String name) {
 //        ArrayList<Customer> custSearchResults = new ArrayList<>();
 //        try {
@@ -140,4 +151,3 @@ public class Customer {
 //
 //        return Database.dbUpdate(s);
 //    }
-}

@@ -23,7 +23,7 @@ public class LoginController {
 //    private static final Locale usingLocale = Localization.getLocale();
 
     // DEBUG LOCALES
-    //    private static final Locale usingLocale = Locale.US;
+//        private static final Locale usingLocale = Locale.US;
     private static final Locale usingLocale = Locale.CANADA_FRENCH;
     @FXML
     private VBox loginVBox;
@@ -68,6 +68,7 @@ public class LoginController {
         passText.setPromptText(Localization.getLocalizedString("passPrompt", Localization.RESOURCE_BUNDLE.LOGIN));
         loginGoBtn.setText(Localization.getLocalizedString("loginGoBtn", Localization.RESOURCE_BUNDLE.LOGIN));
         loginExitBtn.setText(Localization.getLocalizedString("loginExitBtn", Localization.RESOURCE_BUNDLE.LOGIN));
+        badCredsLabel.setText(Localization.getLocalizedString("badCredsLabel", Localization.RESOURCE_BUNDLE.LOGIN));
     }
 
     private static void exitApp() {

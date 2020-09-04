@@ -4,7 +4,9 @@ import application.Main;
 import application.dao.CustomerDAO;
 import application.datamodel.Address;
 import application.datamodel.Customer;
+import static application.localization.Localization.*;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -141,6 +143,8 @@ public class ApplicationController {
     
     public  DatePicker apptEndTimePicker;
 
+    public Label searchResultsLabel;
+
     private Customer _displayedCustomer = null;
     private Customer _editedCustomer;
     private ArrayList<Customer> _custSearchResults;
@@ -149,6 +153,10 @@ public class ApplicationController {
 
     public void exitApp() {
         Main.exitApp();
+    }
+
+    private static String getStr(String propertyLabel) {
+        return getLocalizedString(propertyLabel, RESOURCE_BUNDLE.APP);
     }
 
     public void custSearchGoBtnHandler() {
@@ -163,7 +171,7 @@ public class ApplicationController {
         }
         setCenterAnchor(searchResultPane);
         if(_custSearchResults.isEmpty())
-            searchResultsList.setItems(FXCollections.observableArrayList("No results"));
+            searchResultsList.setItems(FXCollections.observableArrayList(getStr("noResults")));
         else {
             ArrayList<String> namePhonePairs = new ArrayList<>();
             _custSearchResults.forEach(a -> namePhonePairs.add(a.getCustomerName() + " - " + a.getAddress().getPhone()));

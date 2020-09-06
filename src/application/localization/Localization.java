@@ -46,4 +46,8 @@ public final class Localization {
         return DateTimeFormatter.ISO_DATE.withZone(localTimeZone.toZoneId()).format(localTime);
     }
 
+    public static ZonedDateTime getUtcNow() {
+        return ZonedDateTime.now(getUtcTimeZone().toZoneId());
+    }
+
 }

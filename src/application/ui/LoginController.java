@@ -10,9 +10,12 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.util.Locale;
 
@@ -23,8 +26,8 @@ public class LoginController {
 //    private static final Locale usingLocale = Localization.getLocale();
 
     // DEBUG LOCALES
-//        private static final Locale usingLocale = Locale.US;
-    private static final Locale usingLocale = Locale.CANADA_FRENCH;
+        private static final Locale usingLocale = Locale.US;
+//    private static final Locale usingLocale = Locale.CANADA_FRENCH;
     @FXML
     private VBox loginVBox;
 
@@ -83,9 +86,12 @@ public class LoginController {
 
     public void attemptLogin() {
         if(!validateCreds()) {
+
+            logUserLoginAttempt(userText.getText(), false);
             badCredsLabel.setVisible(true);
         }
         else {
+            logUserLoginAttempt(userText.getText(), true);
             Main.login.close();
 
             ApplicationController.loggedInUser = userText.getText();
@@ -94,6 +100,7 @@ public class LoginController {
     }
 
     private boolean validateCreds() {
+
 
         try {
             Statement stmt = Main.dbConn.createStatement();
@@ -105,6 +112,23 @@ public class LoginController {
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
+        }
+    }
+
+    private void logUserLoginAttempt(String userName, boolean successful) {
+        String sep = System.getProperty("file.separator");
+        File f = new File(String.format("src%sresources%slogins.txt", sep, sep));
+        try {
+            System.out.println("File created: " + f.createNewFile());
+            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+            String s = Localization.getUtcNow().toString() +
+                    "\t" + userName + " login " + (successful ? "success." : "failure.");
+            bw.newLine();
+            bw.write(s);
+            bw.close();
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
     }
 }

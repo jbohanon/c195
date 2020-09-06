@@ -8,7 +8,7 @@ public class User {
     private String _password;
     private boolean _active;
 
-    User(int userId, String userName, String password, boolean active) {
+    public User(int userId, String userName, String password, boolean active) {
         _userId = userId;
         _userName = userName;
         _password = password;

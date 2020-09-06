@@ -3,6 +3,7 @@ package application.ui;
 import application.Main;
 import application.dao.CustomerDAO;
 import application.datamodel.Address;
+import application.datamodel.Appointment;
 import application.datamodel.Customer;
 import static application.localization.Localization.*;
 import javafx.collections.FXCollections;
@@ -13,7 +14,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static application.ui.DialogController.okModalDialog;
 
@@ -151,6 +156,15 @@ public class ApplicationController {
 
     private static final CustomerDAO customerDAO = new CustomerDAO();
 
+    private Appointment _displayedAppt = null;
+    private Appointment _editedAppt;
+    private ArrayList<Appointment> _apptSearchResults;
+
+    @FXML
+    public void initialize() {
+        // TODO Create initialize function to set localized strings
+    }
+
     public void exitApp() {
         Main.exitApp();
     }
@@ -182,17 +196,33 @@ public class ApplicationController {
     public void SearchResultsListKeyPressHandler(KeyEvent e) {
         if(e.getCode() == KeyCode.ENTER) {
             if(_custSearchResults.size() > 0) {
-                setCenterAnchor(customerPane);
-                _custSearchResults.forEach(customer -> {
-                    if(searchResultsList.getSelectionModel().getSelectedItem().toString().contains(customer.getCustomerName())) {
-                        _displayedCustomer = customer;
-                    }
-                });
-                populateCustomerPane(_displayedCustomer);
-                _custSearchResults.clear();
+                CustomerSearchResults();
+            } else {
+                AppointmentSearchResults();
             }
-
         }
+    }
+
+    private void CustomerSearchResults() {
+        setCenterAnchor(customerPane);
+        _custSearchResults.forEach(customer -> {
+            if(searchResultsList.getSelectionModel().getSelectedItem().toString().contains(customer.getCustomerName())) {
+                _displayedCustomer = customer;
+            }
+        });
+        populateCustomerPane(_displayedCustomer);
+        _custSearchResults.clear();
+    }
+
+    private void AppointmentSearchResults() {
+        setCenterAnchor(apptPane);
+        _apptSearchResults.forEach(appt -> {
+            if(searchResultsList.getSelectionModel().getSelectedItem().toString().contains(appt.getCustomer().getCustomerName())) {
+                _displayedAppt = appt;
+            }
+        });
+        populateCustomerPane(_displayedCustomer);
+        _custSearchResults.clear();
     }
 
     public void addCustomerBtnHandler() {
@@ -208,6 +238,7 @@ public class ApplicationController {
         setCenterAnchor(viewApptsPane);
     }
     public void custSaveBtnHandler() {
+        Function<TextField, String> getText = TextInputControl::getText;
 
         setCustomerEditable(false);
         if(_displayedCustomer == null) {
@@ -271,35 +302,45 @@ public class ApplicationController {
     }
 
     private void setCustomerEditable(boolean editable) {
-        custNameText.setDisable(!editable);
-        custPhoneText.setDisable(!editable);
-        custAddr1Text.setDisable(!editable);
-        custAddr2Text.setDisable(!editable);
-        custCityText.setDisable(!editable);
-        custCountryText.setDisable(!editable);
-        custPostalCodeText.setDisable(!editable);
-        custActiveCheckbox.setDisable(!editable);
 
-        custEditBtn.setDisable(editable);
-        custEditBtn.setVisible(!editable);
-        custBackBtn.setDisable(editable);
-        custBackBtn.setVisible(!editable);
+        // Change data entry controls
+        Arrays.stream(new Control[]{
+                custNameText,
+                custPhoneText,
+                custAddr1Text,
+                custAddr2Text,
+                custCityText,
+                custCountryText,
+                custPostalCodeText,
+                custActiveCheckbox}
+        ).forEach(control -> control.setDisable(!editable));
 
-        custDiscardBtn.setDisable(!editable);
-        custDiscardBtn.setVisible(editable);
-        custSaveBtn.setDisable(!editable);
-        custSaveBtn.setVisible(editable);
+        // Change edit screen controls
+        Arrays.stream(new Button[]{custDiscardBtn, custSaveBtn}).forEach(control -> {
+            control.setDisable(!editable);
+            control.setVisible(editable);
+        });
+
+        // Change non edit screen controls
+        Arrays.stream(new Button[]{custEditBtn, custBackBtn}).forEach(control -> {
+            control.setDisable(editable);
+            control.setVisible(!editable);
+        });
     }
 
     private void setCenterAnchor(AnchorPane pane) {
-        viewApptsPane.setDisable(true);
-        viewApptsPane.setVisible(false);
-        searchResultPane.setDisable(true);
-        searchResultPane.setVisible(false);
-        apptPane.setDisable(true);
-        apptPane.setVisible(false);
-        customerPane.setDisable(true);
-        customerPane.setVisible(false);
+        // Turn off all center AnchorPanes
+        Arrays.stream(new AnchorPane[]{
+                viewApptsPane,
+                searchResultPane,
+                apptPane,
+                customerPane}
+        ).forEach(ap -> {
+            ap.setDisable(true);
+            ap.setVisible(false);
+        });
+
+        // Turn on needed pane
         pane.setDisable(false);
         pane.setVisible(true);
     }

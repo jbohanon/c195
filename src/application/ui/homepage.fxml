@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<Scene xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.HomepageController">
+    <SplitPane dividerPositions="0.2505567928730512" prefHeight="500.0" prefWidth="600.0">
+        <AnchorPane>
+            <VBox>
+                <padding>
+                    <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+                </padding>
+                <HBox>
+                    <Label fx:id="customersLabel" text="Customers" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
+                </HBox>
+                <HBox>
+                    <TextField fx:id="custSearchText" promptText="Search Customers" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="35.0" />
+
+                    <Button fx:id="custSearchGoBtn" layoutX="120.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#custSearchGoBtnHandler" text="Go" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="35.0" />
+                </HBox>
+
+                <HBox>
+                    <Button fx:id="addCustomerBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#addCustomerBtnHandler" text="Add Customer" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="75.0" />
+                </HBox>
+                <Line endX="100.0" layoutX="103.0" layoutY="347.0" startX="-75.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="120.0" />
+                <HBox>
+                    <Label fx:id="appointmentsLabel" layoutX="10.0" layoutY="132.0" text="Appointments" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="130.0" />
+                </HBox>
+                <HBox>
+                    <TextField fx:id="apptSearchText" layoutX="7.0" layoutY="172.0" promptText="Search Appointments" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="45.0" AnchorPane.topAnchor="155.0" />
+
+                    <Button fx:id="apptSearchGoBtn" layoutX="130.0" layoutY="170.0" mnemonicParsing="false" text="Go" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="155.0" />
+                </HBox>
+                <HBox>
+                    <Button fx:id="addApptBtn" layoutX="26.0" layoutY="135.0" mnemonicParsing="false" text="Add Appointment" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="195.0" />
+                </HBox>
+                <Line endX="100.0" layoutX="93.0" layoutY="337.0" startX="-75.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="245.0" />
+
+                <Line endX="100.0" layoutX="113.0" layoutY="357.0" startX="-75.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="4.0" />
+                <HBox>
+                    <Label fx:id="reportsLabel" layoutX="20.0" layoutY="142.0" text="Reports" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="255.0" />
+                </HBox>
+                <HBox>
+                    <Button fx:id="exitBtn" layoutX="74.0" layoutY="545.0" mnemonicParsing="false" onMouseClicked="#exitApp" text="Exit" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="73.0" />
+                </HBox>
+                <HBox>
+                    <Button fx:id="apptTypesReportBtn" layoutX="11.0" layoutY="277.0" mnemonicParsing="false" text="Appointment Types Report" AnchorPane.bottomAnchor="135.0" />
+                </HBox>
+                <HBox>
+                    <Button fx:id="schedulesReportBtn" layoutX="36.0" layoutY="304.0" mnemonicParsing="false" text="Schedules Report" AnchorPane.bottomAnchor="100.0" />
+                </HBox>
+                <HBox>
+                    <Button fx:id="customersPerConsultantReportBtn" layoutX="1.0" layoutY="331.0" mnemonicParsing="false" prefHeight="25.0" text="Customers / Consultant Report" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="2.5" AnchorPane.rightAnchor="2.5">
+
+                        <font>
+                            <Font size="12.9" />
+                        </font>
+                    </Button>
+                </HBox>
+            </VBox>
+        </AnchorPane>
+        <AnchorPane fx:id="viewApptsPane" disable="true" prefHeight="442.0" prefWidth="394.0" visible="true">
+            <VBox AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
+                <HBox>
+                    <VBox>
+                        <Label alignment="CENTER" style="&#10;" text="Appointments" textAlignment="CENTER" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                            <textFill>
+                                <Color blue="0.624" green="0.624" red="0.624" />
+                            </textFill>
+                        </Label>
+                  <padding>
+                     <Insets right="15.0" />
+                  </padding>
+                    </VBox>
+                    <VBox>
+                        <Button fx:id="calViewChangeBtn" alignment="CENTER" mnemonicParsing="false" prefWidth="54.0" text="Month" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                  <padding>
+                     <Insets left="25.0" />
+                  </padding>
+                    </VBox>
+                    <VBox>
+                        <Label fx:id="calViewLabel" alignment="CENTER_RIGHT" prefHeight="23.0" prefWidth="123.0" style="&#10;" text="Week View" textAlignment="RIGHT" textOverrun="CLIP" AnchorPane.rightAnchor="65.0" AnchorPane.topAnchor="5.0">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                            <textFill>
+                                <Color blue="0.624" green="0.624" red="0.624" />
+                            </textFill>
+                        </Label>
+                    </VBox>
+                </HBox>
+                <HBox AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0"
+                      AnchorPane.topAnchor="50.0">
+                    <padding>
+                        <Insets top="15.0"/>
+                    </padding>
+                    <ListView prefWidth="334.0"/>
+                </HBox>
+            </VBox>
+        </AnchorPane>
+    </SplitPane>
+
+</Scene>

@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static application.ui.ApplicationController.loggedInUser;
@@ -15,7 +14,9 @@ import static application.ui.DialogController.okModalDialog;
 
 public class CustomerDAO implements DAO<Customer> {
     private final AddressDAO addressDAO = new AddressDAO();
+
     @Override
+    // Not implemented
     public Optional<Customer> lookup(int id) {
         return Optional.empty();
     }

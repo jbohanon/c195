@@ -16,6 +16,10 @@ public class Main extends Application {
     public static Connection dbConn;
     public static Stage login;
     public static Stage app;
+    public static Scene homepage;
+    public static Scene apptPage;
+    public static Scene custPage;
+    public static Scene searchResults;
     public static void exitApp() {
         try {
             if (!dbConn.isClosed()) {
@@ -38,7 +42,12 @@ public class Main extends Application {
         app = primaryStage;
         app.setScene(new Scene(FXMLLoader.load(getClass().getResource("ui/application.fxml"))));
 
+        homepage = FXMLLoader.load(getClass().getResource("ui/homepage.fxml"));
+        apptPage = FXMLLoader.load(getClass().getResource("ui/appointmentPage.fxml"));
+        custPage = FXMLLoader.load(getClass().getResource("ui/customerPage.fxml"));
+        searchResults = FXMLLoader.load(getClass().getResource("ui/searchResults.fxml"));
         login = FXMLLoader.load(getClass().getResource("ui/login.fxml"));
+
         login.show();
     }
 

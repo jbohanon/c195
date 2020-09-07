@@ -1,6 +1,7 @@
 package application.ui;
 
-import application.Main;
+import static application.Main.*;
+import static application.ui.ApplicationController.*;
 import application.dao.CustomerDAO;
 import application.datamodel.Customer;
 import javafx.collections.FXCollections;
@@ -33,12 +34,6 @@ public class HomepageController {
 
     public  Button schedulesReportBtn;
 
-    public  AnchorPane searchResultPane;
-
-    public ListView<Object> searchResultsList;
-
-    public  AnchorPane customerPane;
-
     private Customer _displayedCustomer = null;
     private Customer _editedCustomer;
     private ArrayList<Customer> _custSearchResults;
@@ -50,27 +45,33 @@ public class HomepageController {
 
         System.out.println(_custSearchResults.toString());
         if(_custSearchResults.size()==1) {
-            setCenterAnchor(customerPane);
-            _displayedCustomer = _custSearchResults.get(0);
-            populateCustomerPane(_displayedCustomer);
+            DisplayedCustomer = _custSearchResults.get(0);
+            CustEditable = false;
+            app.setScene(custPage);
             return;
         }
-        setCenterAnchor(searchResultPane);
+
+        app.setScene(searchResults);
         if(_custSearchResults.isEmpty())
-            searchResultsList.setItems(FXCollections.observableArrayList(getStr("noResults")));
+            SearchResults.addAll(FXCollections.observableArrayList(getStr("noResults")));
         else {
             ArrayList<String> namePhonePairs = new ArrayList<>();
-            _custSearchResults.forEach(a -> namePhonePairs.add(a.getCustomerName() + " - " + a.getAddress().getPhone()));
-            searchResultsList.setItems(FXCollections.observableArrayList(namePhonePairs));
+            _custSearchResults.forEach(a -> {
+                CustSearchResults.put(a.getCustomerName(), a);
+                namePhonePairs.add(a.getCustomerName() + " - " + a.getAddress().getPhone());
+            });
+            SearchResults.addAll(FXCollections.observableArrayList(namePhonePairs));
         }
     }
 
     public void addCustomerBtnHandler() {
-        setCenterAnchor(customerPane);
-        setCustomerEditable(true);
+        app.setScene(custPage);
+//        setCenterAnchor(customerPane);
+        CustEditable = true;
+//        setCustomerEditable(true);
     }
 
     public void exitApp(MouseEvent mouseEvent) {
-        Main.exitApp();
+        application.Main.exitApp();
     }
 }

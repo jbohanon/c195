@@ -3,7 +3,7 @@ package application.ui;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class SearchResults {
+public class SearchResultsController {
 
     private boolean _isCustomer;
     private boolean _isAppt;

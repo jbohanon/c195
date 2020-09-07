@@ -1,9 +1,9 @@
 package application.ui;
 
-public interface EditablePaneBehavior {
+public interface EditablePaneBehavior<T> {
     void SearchResults();
-    void PopulatePane();
-    void SetEditable();
+    void PopulatePane(T t);
+    void SetEditable(boolean editable);
     void EditBtnHandler();
     void BackBtnHandler();
     void SaveBtnHandler();

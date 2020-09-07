@@ -2,10 +2,13 @@
 
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.Scene?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Label?>
 <Scene xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
-       fx:controller="application.ui.SearchResults">
-    <AnchorPane prefHeight="400.0" prefWidth="600.0">
-
+       fx:controller="application.ui.SearchResultsController">
+    <AnchorPane fx:id="searchResultPane" disable="true" prefHeight="442.0" prefWidth="394.0" visible="false">
+        <Label fx:id="searchResultsLabel" layoutX="14.0" layoutY="14.0" text="Search Results" />
+        <ListView fx:id="searchResultsList" layoutX="14.0" layoutY="40.0" onKeyPressed="#SearchResultsListKeyPressHandler" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0" />
     </AnchorPane>
 </Scene>

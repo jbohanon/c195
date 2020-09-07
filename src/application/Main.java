@@ -1,6 +1,8 @@
 package application;
 
 import application.dao.Database;
+import application.datamodel.Customer;
+import application.localization.Localization;
 import application.ui.LoginController;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -10,6 +12,9 @@ import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import static application.localization.Localization.getLocalizedString;
 
 public class Main extends Application {
 
@@ -20,6 +25,7 @@ public class Main extends Application {
     public static Scene apptPage;
     public static Scene custPage;
     public static Scene searchResults;
+
     public static void exitApp() {
         try {
             if (!dbConn.isClosed()) {
@@ -39,19 +45,29 @@ public class Main extends Application {
             exitApp();
         }
 
-        app = primaryStage;
-        app.setScene(new Scene(FXMLLoader.load(getClass().getResource("ui/application.fxml"))));
+//        app = primaryStage;
+//        app.setScene(new Scene(FXMLLoader.load(getClass().getResource("ui/application.fxml"))));
 
+        // Load Stages
+        app = FXMLLoader.load(getClass().getResource("ui/application.fxml"));
+        login = FXMLLoader.load(getClass().getResource("ui/login.fxml"));
+
+        // Load Scenes
         homepage = FXMLLoader.load(getClass().getResource("ui/homepage.fxml"));
         apptPage = FXMLLoader.load(getClass().getResource("ui/appointmentPage.fxml"));
         custPage = FXMLLoader.load(getClass().getResource("ui/customerPage.fxml"));
         searchResults = FXMLLoader.load(getClass().getResource("ui/searchResults.fxml"));
-        login = FXMLLoader.load(getClass().getResource("ui/login.fxml"));
 
+        app.setScene(homepage);
         login.show();
     }
 
     public static void main(String[] args) {
         launch(args);
+    }
+
+
+    public static String getStr(String propertyLabel) {
+        return getLocalizedString(propertyLabel, Localization.RESOURCE_BUNDLE.APP);
     }
 }

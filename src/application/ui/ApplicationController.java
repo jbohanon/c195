@@ -25,134 +25,14 @@ import static application.ui.DialogController.okModalDialog;
 public class ApplicationController {
 
     public static String loggedInUser;
-    
-    public  Button exitBtn;
-    
-    public  TextField custSearchText;
-    
-    public  Button custSearchGoBtn;
-    
-    public  Button addCustomerBtn;
-    
-    public  TextField apptSearchText;
-    
-    public  Button apptSearchGoBtn;
-    
-    public  Button addApptBtn;
-    
-    public  Button apptTypesReportBtn;
-    
-    public  Button schedulesReportBtn;
-    
-    public  AnchorPane scrollPaneAnchor;
-    
-    public  AnchorPane viewApptsPane;
-    
-    public  Button calViewChangeBtn;
-    
-    public  Label calViewLabel;
-    
-    public  AnchorPane searchResultPane;
-    
-    public  ListView<Object> searchResultsList;
-    
-    public  AnchorPane customerPane;
-    
-    public  Label custDetailsLabel;
-    
-    public  Label custNameLabel;
-    
-    public  TextField custNameText;
-    
-    public  Label custPhoneLabel;
-    
-    public  TextField custPhoneText;
-    
-    public  Label custAddr1Label;
-    
-    public  TextField custAddr1Text;
-    
-    public  CheckBox custActiveCheckbox;
-    
-    public  Button custBackBtn;
-    
-    public  Button custEditBtn;
-    
-    public  Button custSaveBtn;
-    
-    public  Button custDiscardBtn;
-    
-    public  Label custAddr2Label;
-    
-    public  TextField custAddr2Text;
-    
-    public  Label custCityLabel;
-    
-    public  TextField custCityText;
-    
-    public  Label custCountryLabel;
-    
-    public  TextField custCountryText;
-    
-    public  Label custPostalCodeLabel;
-    
-    public  TextField custPostalCodeText;
-    
-    public  AnchorPane apptPane;
-    
-    public  Label apptDetailsLabel;
-    
-    public  Label apptCustNameLabel;
-    
-    public  TextField apptCustNameText;
-    
-    public  Label apptAssociateNameLabel;
-    
-    public  TextField apptAssociateNameText;
-    
-    public  Label apptTitleLabel;
-    
-    public  TextField apptTitleText;
-    
-    public  Button apptBackBtn;
-    
-    public  Button apptEditBtn;
-    
-    public  Button apptSaveBtn;
-    
-    public  Button apptDiscardBtn;
-    
-    public  Label apptDescLabel;
-    
-    public  TextField apptDescText;
-    
-    public  Label apptLocationLabel;
-    
-    public  TextField apptLocationText;
-    
-    public  Label apptContactLabel;
-    
-    public  TextField apptContactText;
-    
-    public  Label apptUrlLabel;
-    
-    public  TextField apptUrlText;
-    
-    public  RadioButton apptType1Radio;
-    
-    public  RadioButton apptType2Radio;
-    
-    public  RadioButton apptType3Radio;
-    
-    public  DatePicker apptStartTimePicker;
-    
-    public  DatePicker apptEndTimePicker;
 
-    public Label searchResultsLabel;
+    public static Customer DisplayedCustomer;
+    public static boolean CustEditable;
+    public static ArrayList<String> SearchResults;
 
     private Customer _displayedCustomer = null;
     private Customer _editedCustomer;
-    private ArrayList<Customer> _custSearchResults;
+    public static HashMap<String, Customer> CustSearchResults;
 
     private static final CustomerDAO customerDAO = new CustomerDAO();
 

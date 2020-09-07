@@ -1,6 +1,6 @@
 package application.ui;
 
-public class AppointmentPage implements EditablePaneBehavior {
+public class AppointmentPageController implements EditablePaneBehavior {
     @Override
     public void SearchResults() {
 

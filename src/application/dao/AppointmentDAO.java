@@ -11,6 +11,8 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +20,12 @@ import static application.dao.Database.dbUpdate;
 import static application.ui.ApplicationController.loggedInUser;
 
 public class AppointmentDAO implements DAO<Appointment> {
+    public static ArrayList<Appointment> search(String searchTerm) {
+        ArrayList<Appointment> apptSearchResults = new ArrayList<>();
+
+        return apptSearchResults;
+    }
+
     @Override
     public Optional<Appointment> lookup(int id) {
         try {

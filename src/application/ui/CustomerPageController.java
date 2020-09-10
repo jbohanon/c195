@@ -1,11 +1,13 @@
 package application.ui;
 
+import application.datamodel.Address;
 import application.datamodel.Customer;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+
+import java.util.function.Function;
+
+import static application.ui.DialogController.okModalDialog;
 
 public class CustomerPageController implements EditablePaneBehavior<Customer> {
 
@@ -75,21 +77,70 @@ public class CustomerPageController implements EditablePaneBehavior<Customer> {
 
     @Override
     public void EditBtnHandler() {
+        _editedCustomer = _displayedCustomer;
+        setCustomerEditable(true);
 
     }
 
     @Override
     public void BackBtnHandler() {
+        setCenterAnchor(viewApptsPane);
 
     }
 
     @Override
     public void SaveBtnHandler() {
+        Function<TextField, String> getText = TextInputControl::getText;
+
+        setCustomerEditable(false);
+        if(_displayedCustomer == null) {
+            Customer newCustomer = new Customer(0,
+                    custNameText.getText(),
+                    new Address(0,
+                            custAddr1Text.getText(),
+                            custAddr2Text.getText(),
+                            custCityText.getText(),
+                            custPostalCodeText.getText(),
+                            custPhoneText.getText(),
+                            custCountryText.getText()
+                    ),
+                    custActiveCheckbox.isSelected());
+            if(!customerDAO.insert(newCustomer)) {
+                okModalDialog("Issue writing new customer to database.");
+                return;
+            }
+            newCustomer = customerDAO.lookupAndSetCustomerId(newCustomer);
+            _displayedCustomer = newCustomer;
+            okModalDialog("New customer created!");
+        } else {
+            _editedCustomer = new Customer(
+                    _displayedCustomer.getCustomerId(),
+                    custNameText.getText(),
+                    new Address(_displayedCustomer.getAddress().getAddressId(),
+                            custAddr1Text.getText(),
+                            custAddr2Text.getText(),
+                            custCityText.getText(),
+                            custPostalCodeText.getText(),
+                            custPhoneText.getText(),
+                            custCountryText.getText()
+                    ),
+                    custActiveCheckbox.isSelected());
+            if(!customerDAO.update(_editedCustomer)) {
+                okModalDialog("Issue writing edited customer to database.");
+                return;
+            }
+            _displayedCustomer = _editedCustomer;
+        }
 
     }
 
     @Override
     public void DiscardBtnHandler() {
+        if(_displayedCustomer == null){
+            setCenterAnchor(viewApptsPane);
+            return;
+        }
+        populateCustomerPane(_displayedCustomer);
 
     }
 

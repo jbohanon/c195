@@ -2,8 +2,12 @@ package application.ui;
 
 import static application.Main.*;
 import static application.ui.ApplicationController.*;
+
+import application.dao.AppointmentDAO;
 import application.dao.CustomerDAO;
+import application.datamodel.Appointment;
 import application.datamodel.Customer;
+import application.localization.Localization;
 import javafx.collections.FXCollections;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -34,9 +38,9 @@ public class HomepageController {
 
     public  Button schedulesReportBtn;
 
-    private Customer _displayedCustomer = null;
-    private Customer _editedCustomer;
     private ArrayList<Customer> _custSearchResults;
+
+    private ArrayList<Appointment> _apptSearchResults;
 
     private CustomerDAO customerDAO = new CustomerDAO();
 
@@ -51,7 +55,6 @@ public class HomepageController {
             return;
         }
 
-        app.setScene(searchResults);
         if(_custSearchResults.isEmpty())
             SearchResults.addAll(FXCollections.observableArrayList(getStr("noResults")));
         else {
@@ -62,16 +65,46 @@ public class HomepageController {
             });
             SearchResults.addAll(FXCollections.observableArrayList(namePhonePairs));
         }
+        searchType = SEARCH_TYPE.CUST;
+        app.setScene(searchResults);
     }
 
     public void addCustomerBtnHandler() {
-        app.setScene(custPage);
-//        setCenterAnchor(customerPane);
         CustEditable = true;
-//        setCustomerEditable(true);
+        app.setScene(custPage);
     }
 
-    public void exitApp(MouseEvent mouseEvent) {
+    public void apptSearchGoBtnHandler() {
+        _apptSearchResults = AppointmentDAO.search(apptSearchText.getText().replace("'", ""));
+
+        _apptSearchResults.forEach(a -> System.out.println(a.toString()));
+        if(_apptSearchResults.size()==1) {
+            DisplayedAppointment = _apptSearchResults.get(0);
+            ApptEditable = false;
+            app.setScene(apptPage);
+            return;
+        }
+
+        if(_apptSearchResults.isEmpty())
+            SearchResults.addAll(FXCollections.observableArrayList(getStr("noResults")));
+        else {
+            ArrayList<String> namePhonePairs = new ArrayList<>();
+            _apptSearchResults.forEach(a -> {
+                ApptSearchResults.put(a.getCustomer().getCustomerName() + a.getTitle() + a.getStart().toString(), a);
+                namePhonePairs.add(a.getCustomer().getCustomerName() + " - " + a.getTitle() + " - " + Localization.);
+            });
+            SearchResults.addAll(FXCollections.observableArrayList(namePhonePairs));
+        }
+        searchType = SEARCH_TYPE.APPT;
+        app.setScene(searchResults);
+    }
+
+    public void addAppointmentBtnHandler() {
+        CustEditable = true;
+        app.setScene(custPage);
+    }
+
+    public void exitApp() {
         application.Main.exitApp();
     }
 }

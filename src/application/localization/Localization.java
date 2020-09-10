@@ -36,14 +36,20 @@ public final class Localization {
         return ZonedDateTime.ofLocal(LocalDateTime.parse(localUtcTime), ZoneId.of("UTC"), ZoneOffset.UTC);
     }
 
-    public static LocalDateTime getLocalTime(String isoTime) {
-        TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse(isoTime);
-        Instant i = Instant.from(ta);
-        return LocalDateTime.ofInstant(i, ZoneId.of("UTC"));
+    public static ZonedDateTime getZonedLocalTime(String zonedUtcTime) {
+
+        //TODO converting between time offsets with daylight savings considerations is a bitch
+        return ZonedDateTime.ofStrict()
     }
+//
+//    public static LocalDateTime getLocalUtcTime(String isoTime) {
+//        TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse(isoTime);
+//        Instant i = Instant.from(ta);
+//        return LocalDateTime.ofInstant(i, ZoneId.of("UTC"));
+//    }
 
     public static String getIsoTime(LocalDateTime localTime, TimeZone localTimeZone) {
-        return DateTimeFormatter.ISO_DATE.withZone(localTimeZone.toZoneId()).format(localTime);
+        return DateTimeFormatter.ISO_ZONED_DATE_TIME.withZone(localTimeZone.toZoneId()).format(localTime);
     }
 
     public static ZonedDateTime getUtcNow() {

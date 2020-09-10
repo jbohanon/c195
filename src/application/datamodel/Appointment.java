@@ -1,5 +1,6 @@
 package application.datamodel;
 
+import application.dao.AppointmentDAO;
 import application.dao.CustomerDAO;
 import application.dao.UserDAO;
 import application.localization.*;
@@ -25,6 +26,7 @@ public class Appointment {
 
     private static final CustomerDAO customerDAO = new CustomerDAO();
     private static final UserDAO userDAO = new UserDAO();
+    private static final AppointmentDAO appointmentDAO = new AppointmentDAO();
 
     public Appointment(int appointmentId, int customerId, int userId, String title, String description, String location, String contact, String type, String url, String start, String end) {
         _appointmentId = appointmentId;
@@ -38,6 +40,20 @@ public class Appointment {
         _url = url;
         _start = Localization.getZonedUtcTime(start);
         _end = Localization.getZonedUtcTime(end);
+    }
+
+    public Appointment() {
+        _appointmentId = -1;
+        _customer = Customer.nullCustomer();
+        _user = User.nullUser();
+        _title = "Err";
+        _description = "Err";
+        _location = "Err";
+        _contact = "Err";
+        _type = APPT_TYPE.TYPE_UNKNOWN;
+        _url = "Err";
+        _start = ZonedDateTime.now();
+        _end = ZonedDateTime.now();
     }
 
     public int getAppointmentId() {
@@ -121,6 +137,31 @@ public class Appointment {
         TYPE_1, TYPE_2, TYPE_3, TYPE_UNKNOWN
     }
 
+    public String toString() {
+        return String.format("appointmentId: %d\n" +
+                "Customer Name: %s\n" +
+                "Consultant Name: %s\n" +
+                "Title: %s\n" +
+                "Description: %s\n" +
+                "Location: %s\n" +
+                "Contact: %s\n" +
+                "Type: %s\n" +
+                "Url: %s\n" +
+                "Start: %s\n" +
+                "End: %s",
+                _appointmentId,
+                _customer.getCustomerName(),
+                _user.getUserName(),
+                _title,
+                _description,
+                _location,
+                _contact,
+                apptTypeToString(_type),
+                _url,
+                _start.toString(),
+                _end.toString());
+    }
+
     public String apptTypeToString(APPT_TYPE type) {
         switch (type) {
             case TYPE_1: return "type_1";
@@ -137,5 +178,9 @@ public class Appointment {
             case "type_3": return APPT_TYPE.TYPE_3;
             default: return APPT_TYPE.TYPE_UNKNOWN;
         }
+    }
+
+    private Appointment nullAppt() {
+        return new Appointment();
     }
 }

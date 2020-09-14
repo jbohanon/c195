@@ -43,16 +43,19 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
+    // Not implemented
     public boolean insert(User user) {
         return false;
     }
 
     @Override
+    // Not implemented
     public boolean update(User user) {
         return false;
     }
 
     @Override
+    // Not implemented
     public boolean delete(User user) {
         return false;
     }

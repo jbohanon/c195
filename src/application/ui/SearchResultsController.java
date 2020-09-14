@@ -1,5 +1,6 @@
 package application.ui;
 
+import application.datamodel.Customer;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -23,21 +24,21 @@ public class SearchResultsController {
 
     public void SearchResultsListKeyPressHandler(KeyEvent e) {
         if(e.getCode() == KeyCode.ENTER) {
-            if(searchType == SEARCH_TYPE.CUST) {
-                CustomerSelected();
-            } else {
-                AppointmentSelected();
+            switch (searchType) {
+                case CUST: CustomerSelected(CustomerPageFxml);
+                case APPT: AppointmentSelected();
+                default: CustomerSelected(AppointmentPageFxml);
             }
         }
     }
 
-    private void CustomerSelected() {
+    private void CustomerSelected(String nextScene) {
         CustSearchResults.values().forEach(customer -> {
             if(searchResultsList.getSelectionModel().getSelectedItem().contains(customer.getCustomerName())) {
                 DisplayedCustomer = customer;
             }
         });
-        sceneChanger.ChangeScene(CustomerPageFxml);
+        sceneChanger.ChangeScene(nextScene);
         CustSearchResults.clear();
     }
 

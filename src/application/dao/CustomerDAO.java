@@ -2,6 +2,7 @@ package application.dao;
 
 import application.Main;
 import application.datamodel.Customer;
+import application.ui.DialogController;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -45,7 +46,10 @@ public class CustomerDAO implements DAO<Customer> {
 
     @Override
     public boolean update(Customer customer) {
-        addressDAO.update(customer.getAddress());
+        if(!addressDAO.update(customer.getAddress())) {
+            DialogController.okModalDialog("Issue occurred updating address.");
+            return false;
+        }
 
         String s = "UPDATE customer SET " +
                 "customerName='" + customer.getCustomerName() +
@@ -60,7 +64,8 @@ public class CustomerDAO implements DAO<Customer> {
 
     @Override
     public boolean delete(Customer customer) {
-        return false;
+        String s = "DELETE FROM CUSTOMER WHERE customerId=" + customer.getCustomerId();
+        return Database.dbUpdate(s);
     }
 
     public ArrayList<Customer> search(String name) {

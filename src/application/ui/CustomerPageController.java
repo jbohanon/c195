@@ -141,8 +141,6 @@ public class CustomerPageController implements EditablePaneBehavior<Customer> {
                 okModalDialog("Issue writing new customer to database.");
                 return;
             }
-//            newCustomer = customerDAO.lookupAndSetCustomerId(newCustomer);
-//            DisplayedCustomer = newCustomer;
             DisplayedCustomer = customerDAO.lookupAndSetCustomerId(newCustomer);
             okModalDialog("New customer created!");
         } else {
@@ -166,7 +164,6 @@ public class CustomerPageController implements EditablePaneBehavior<Customer> {
 
             DisplayedCustomer = _editedCustomer;
         }
-
     }
 
     @Override

@@ -32,7 +32,7 @@ public class ApplicationController {
     public static HashMap<String, Appointment> ApptSearchResults = new HashMap<>();
 
     public enum SEARCH_TYPE {
-        CUST, APPT
+        CUST, APPT, CUST_FOR_APPT
     }
 
     public void exitApp() {

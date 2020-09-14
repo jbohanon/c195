@@ -11,10 +11,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 public class HomepageController {
 
-
+    // FXML Fields
     public Button exitBtn;
 
     public TextField custSearchText;
@@ -45,7 +46,6 @@ public class HomepageController {
         if(_custSearchResults.size()==1) {
             DisplayedCustomer = _custSearchResults.get(0);
             CustEditable = false;
-//            app.setScene(custPage);
             sceneChanger.ChangeScene(CustomerPageFxml);
             return;
         }
@@ -53,22 +53,20 @@ public class HomepageController {
         if(_custSearchResults.isEmpty())
             SearchResults.addAll(FXCollections.observableArrayList(getStr("noResults")));
         else {
-            ArrayList<String> namePhonePairs = new ArrayList<>();
+            ArrayList<String> displayResults = new ArrayList<>();
             _custSearchResults.forEach(a -> {
                 System.out.println("Breaker 1: " + CustSearchResults.size());
                 CustSearchResults.put(a.getCustomerName(), a);
-                namePhonePairs.add(a.getCustomerName() + " - " + a.getAddress().getPhone());
+                displayResults.add(a.getCustomerName() + " - " + a.getAddress().getPhone());
             });
-            SearchResults.addAll(namePhonePairs);
+            SearchResults.addAll(displayResults);
         }
         searchType = SEARCH_TYPE.CUST;
-//        app.setScene(searchResults);
         sceneChanger.ChangeScene(SearchResultsFxml);
     }
 
     public void addCustomerBtnHandler() {
         CustEditable = true;
-//        app.setScene(custPage);
         sceneChanger.ChangeScene(CustomerPageFxml);
     }
 
@@ -79,7 +77,6 @@ public class HomepageController {
         if(_apptSearchResults.size()==1) {
             DisplayedAppointment = _apptSearchResults.get(0);
             ApptEditable = false;
-//            app.setScene(apptPage);
             sceneChanger.ChangeScene(AppointmentPageFxml);
             return;
         }
@@ -87,22 +84,19 @@ public class HomepageController {
         if(_apptSearchResults.isEmpty())
             SearchResults.addAll(FXCollections.observableArrayList(getStr("noResults")));
         else {
-            ArrayList<String> namePhonePairs = new ArrayList<>();
+            ArrayList<String> displayResults = new ArrayList<>();
             _apptSearchResults.forEach(a -> {
                 ApptSearchResults.put(a.getCustomer().getCustomerName() + a.getTitle() + Localization.getZonedLocalTime(a.getStart(), Localization.getLocalTimeZone().toZoneId()), a);
-// TODO finish up here
-                //                namePhonePairs.add(a.getCustomer().getCustomerName() + " - " + a.getTitle() + " - " + Localization.);
+                displayResults.add(a.getCustomer().getCustomerName() + " - " + a.getTitle() + " - " + Localization.getZonedLocalTime(a.getStart(), TimeZone.getDefault().toZoneId()).toLocalDateTime().toString());
             });
-            SearchResults.addAll(FXCollections.observableArrayList(namePhonePairs));
+            SearchResults.addAll(FXCollections.observableArrayList(displayResults));
         }
         searchType = SEARCH_TYPE.APPT;
-//        app.setScene(searchResults);
         sceneChanger.ChangeScene(SearchResultsFxml);
     }
 
     public void addAppointmentBtnHandler() {
         CustEditable = true;
-//        app.setScene(custPage);
         sceneChanger.ChangeScene(CustomerPageFxml);
     }
 

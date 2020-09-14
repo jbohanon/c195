@@ -16,6 +16,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardOpenOption;
 import java.sql.*;
 import java.util.Locale;
 
@@ -118,14 +120,18 @@ public class LoginController {
     private void logUserLoginAttempt(String userName, boolean successful) {
         String sep = System.getProperty("file.separator");
         File f = new File(String.format("src%sresources%slogins.txt", sep, sep));
+
+        String s = Localization.getUtcNow().toString() +
+                "\t" + userName + " login " + (successful ? "success." : "failure.") + "\n";
+
         try {
             System.out.println("File created: " + f.createNewFile());
-            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-            String s = Localization.getUtcNow().toString() +
-                    "\t" + userName + " login " + (successful ? "success." : "failure.");
-            bw.newLine();
-            bw.write(s);
-            bw.close();
+////            FileWriter fw = new FileWriter(f);
+////            fw.append(s);
+//            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+//            bw.append(s);
+//            bw.close();
+            Files.write(f.toPath(), s.getBytes(), StandardOpenOption.APPEND);
 
         } catch (IOException ex) {
             ex.printStackTrace();

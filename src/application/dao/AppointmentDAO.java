@@ -20,7 +20,7 @@ import static application.dao.Database.dbUpdate;
 import static application.ui.ApplicationController.loggedInUser;
 
 public class AppointmentDAO implements DAO<Appointment> {
-    public static ArrayList<Appointment> search(String searchTerm) {
+    public ArrayList<Appointment> search(String searchTerm) {
         ArrayList<Appointment> apptSearchResults = new ArrayList<>();
 
         return apptSearchResults;

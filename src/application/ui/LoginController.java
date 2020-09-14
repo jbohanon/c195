@@ -21,7 +21,7 @@ import java.util.Locale;
 
 public class LoginController {
 
-    private static final boolean debugMode = false;
+    private static final boolean debugMode = true;
 
 //    private static final Locale usingLocale = Localization.getLocale();
 
@@ -62,7 +62,7 @@ public class LoginController {
         if(debugMode) {
             userText.setText("test");
             passText.setText("test");
-            attemptLogin();
+//            attemptLogin();
         }
         Locale.setDefault(usingLocale);
         loginLabel.setText(Localization.getLocalizedString("loginLabel", Localization.RESOURCE_BUNDLE.LOGIN));

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<Scene xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<Scene xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
        fx:controller="application.ui.SearchResultsController">
     <AnchorPane fx:id="searchResultPane" prefHeight="442.0" prefWidth="394.0">
         <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"

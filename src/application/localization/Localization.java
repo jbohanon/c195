@@ -1,12 +1,6 @@
 package application.localization;
 
-import com.sun.tools.internal.xjc.Language;
-import sun.util.locale.LocaleUtils;
-
-import java.sql.Time;
 import java.time.*;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.*;
 
 public final class Localization {
@@ -15,13 +9,9 @@ public final class Localization {
         LOGIN, APP
     }
 
-    public static Locale getLocale() {
-        return Locale.getDefault();
-    }
-
     public static String getLocalizedString(String propertyLabel, RESOURCE_BUNDLE bundle) {
         String bundleName = "application/localization/" + (bundle.equals(RESOURCE_BUNDLE.LOGIN) ? "login" : "app");
-        return PropertyResourceBundle.getBundle(bundleName, getLocale()).getString(propertyLabel);
+        return PropertyResourceBundle.getBundle(bundleName, Locale.getDefault()).getString(propertyLabel);
     }
 
     public static TimeZone getLocalTimeZone() {
@@ -36,24 +26,28 @@ public final class Localization {
         return ZonedDateTime.ofLocal(LocalDateTime.parse(localUtcTime), ZoneId.of("UTC"), ZoneOffset.UTC);
     }
 
-    public static ZonedDateTime getZonedLocalTime(String zonedUtcTime) {
+    public static ZonedDateTime getZonedLocalTime(ZonedDateTime zonedUtcTime, ZoneId targetZoneId) {
 
-        //TODO converting between time offsets with daylight savings considerations is a bitch
-        return ZonedDateTime.ofStrict()
+        return zonedUtcTime.withZoneSameInstant(targetZoneId);
     }
+
+    public static ZonedDateTime getUtcNow() {
+        return ZonedDateTime.now(getUtcTimeZone().toZoneId());
+    }
+
+//    public static Locale getDefaultLocale() {
+//        return Locale.getDefault();
+//    }
 //
 //    public static LocalDateTime getLocalUtcTime(String isoTime) {
 //        TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse(isoTime);
 //        Instant i = Instant.from(ta);
 //        return LocalDateTime.ofInstant(i, ZoneId.of("UTC"));
 //    }
+//
+//    public static String getIsoTime(LocalDateTime localTime, TimeZone localTimeZone) {
+//        return DateTimeFormatter.ISO_ZONED_DATE_TIME.withZone(localTimeZone.toZoneId()).format(localTime);
+//    }
 
-    public static String getIsoTime(LocalDateTime localTime, TimeZone localTimeZone) {
-        return DateTimeFormatter.ISO_ZONED_DATE_TIME.withZone(localTimeZone.toZoneId()).format(localTime);
-    }
-
-    public static ZonedDateTime getUtcNow() {
-        return ZonedDateTime.now(getUtcTimeZone().toZoneId());
-    }
 
 }

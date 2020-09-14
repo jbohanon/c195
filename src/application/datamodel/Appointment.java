@@ -180,7 +180,7 @@ public class Appointment {
         }
     }
 
-    private Appointment nullAppt() {
+    public static Appointment nullAppt() {
         return new Appointment();
     }
 }

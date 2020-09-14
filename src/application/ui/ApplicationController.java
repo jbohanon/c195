@@ -1,54 +1,38 @@
 package application.ui;
 
 import application.Main;
-import application.dao.CustomerDAO;
-import application.datamodel.Address;
+import application.dao.*;
 import application.datamodel.Appointment;
 import application.datamodel.Customer;
 import static application.localization.Localization.*;
-import javafx.collections.FXCollections;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
-import static application.ui.DialogController.okModalDialog;
 
 public class ApplicationController {
 
     public static String loggedInUser;
 
+    public static AddressDAO addressDAO = new AddressDAO();
+    public static AppointmentDAO appointmentDAO = new AppointmentDAO();
+    public static CityDAO cityDAO = new CityDAO();
+    public static CountryDAO countryDAO = new CountryDAO();
+    public static CustomerDAO customerDAO = new CustomerDAO();
+    public static UserDAO userDAO = new UserDAO();
+
     public static Customer DisplayedCustomer;
     public static boolean CustEditable;
     public static Appointment DisplayedAppointment;
     public static boolean ApptEditable;
-    public static ArrayList<String> SearchResults;
-    public enum SEARCH_TYPE {
-        CUST, APPT
-    }
+    public static ArrayList<String> SearchResults = new ArrayList<>();
+    public static SceneChanger sceneChanger = new SceneChanger();
+
     public static SEARCH_TYPE searchType = null;
 
-//    private Customer _displayedCustomer = null;
-//    private Customer _editedCustomer;
-    public static HashMap<String, Customer> CustSearchResults;
+    public static HashMap<String, Customer> CustSearchResults = new HashMap<>();
+    public static HashMap<String, Appointment> ApptSearchResults = new HashMap<>();
 
-//    private static final CustomerDAO customerDAO = new CustomerDAO();
-//
-//    private Appointment _displayedAppt = null;
-//    private Appointment _editedAppt;
-    public static HashMap<String, Appointment> ApptSearchResults;
-
-    @FXML
-    public void initialize() {
-        // TODO Create initialize function to set localized strings
+    public enum SEARCH_TYPE {
+        CUST, APPT
     }
 
     public void exitApp() {
@@ -58,6 +42,7 @@ public class ApplicationController {
     private static String getStr(String propertyLabel) {
         return getLocalizedString(propertyLabel, RESOURCE_BUNDLE.APP);
     }
+
 //
 //    public void custSearchGoBtnHandler() {
 //        _custSearchResults = customerDAO.search(custSearchText.getText().replace("'", ""));

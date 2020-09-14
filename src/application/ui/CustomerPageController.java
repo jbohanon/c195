@@ -5,13 +5,17 @@ import application.datamodel.Customer;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-import java.util.function.Function;
+import java.util.Arrays;
 
+import static application.Main.*;
+
+import static application.ui.ApplicationController.*;
 import static application.ui.DialogController.okModalDialog;
+import static application.ui.DialogController.yesNoModalDialog;
 
 public class CustomerPageController implements EditablePaneBehavior<Customer> {
 
-
+    // FXML Fields
     public Label custDetailsLabel;
 
     public  Label custNameLabel;
@@ -52,9 +56,16 @@ public class CustomerPageController implements EditablePaneBehavior<Customer> {
 
     public  TextField custPostalCodeText;
 
+    private Customer _editedCustomer;
+
     @Override
     public void SearchResults() {
+    }
 
+    @FXML
+    private void initialize() {
+        // TODO localization
+        PopulatePane(DisplayedCustomer);
     }
 
     @Override
@@ -72,28 +83,48 @@ public class CustomerPageController implements EditablePaneBehavior<Customer> {
 
     @Override
     public void SetEditable(boolean editable) {
+        // Change data entry controls
+        Arrays.stream(new Control[]{
+                custNameText,
+                custPhoneText,
+                custAddr1Text,
+                custAddr2Text,
+                custCityText,
+                custCountryText,
+                custPostalCodeText,
+                custActiveCheckbox}
+        ).forEach(control -> control.setDisable(!editable));
 
+        // Change edit screen controls
+        Arrays.stream(new Button[]{custDiscardBtn, custSaveBtn}).forEach(control -> {
+            control.setDisable(!editable);
+            control.setVisible(editable);
+        });
+
+        // Change non edit screen controls
+        Arrays.stream(new Button[]{custEditBtn, custBackBtn}).forEach(control -> {
+            control.setDisable(editable);
+            control.setVisible(!editable);
+        });
     }
 
     @Override
     public void EditBtnHandler() {
-        _editedCustomer = _displayedCustomer;
-        setCustomerEditable(true);
+        _editedCustomer = DisplayedCustomer;
+        SetEditable(true);
 
     }
 
     @Override
     public void BackBtnHandler() {
-        setCenterAnchor(viewApptsPane);
-
+        sceneChanger.ChangeScene(HomepageFxml);
     }
 
     @Override
     public void SaveBtnHandler() {
-        Function<TextField, String> getText = TextInputControl::getText;
 
-        setCustomerEditable(false);
-        if(_displayedCustomer == null) {
+        SetEditable(false);
+        if(DisplayedCustomer == null) {
             Customer newCustomer = new Customer(0,
                     custNameText.getText(),
                     new Address(0,
@@ -105,18 +136,20 @@ public class CustomerPageController implements EditablePaneBehavior<Customer> {
                             custCountryText.getText()
                     ),
                     custActiveCheckbox.isSelected());
+
             if(!customerDAO.insert(newCustomer)) {
                 okModalDialog("Issue writing new customer to database.");
                 return;
             }
-            newCustomer = customerDAO.lookupAndSetCustomerId(newCustomer);
-            _displayedCustomer = newCustomer;
+//            newCustomer = customerDAO.lookupAndSetCustomerId(newCustomer);
+//            DisplayedCustomer = newCustomer;
+            DisplayedCustomer = customerDAO.lookupAndSetCustomerId(newCustomer);
             okModalDialog("New customer created!");
         } else {
             _editedCustomer = new Customer(
-                    _displayedCustomer.getCustomerId(),
+                    DisplayedCustomer.getCustomerId(),
                     custNameText.getText(),
-                    new Address(_displayedCustomer.getAddress().getAddressId(),
+                    new Address(DisplayedCustomer.getAddress().getAddressId(),
                             custAddr1Text.getText(),
                             custAddr2Text.getText(),
                             custCityText.getText(),
@@ -125,27 +158,30 @@ public class CustomerPageController implements EditablePaneBehavior<Customer> {
                             custCountryText.getText()
                     ),
                     custActiveCheckbox.isSelected());
+
             if(!customerDAO.update(_editedCustomer)) {
                 okModalDialog("Issue writing edited customer to database.");
                 return;
             }
-            _displayedCustomer = _editedCustomer;
+
+            DisplayedCustomer = _editedCustomer;
         }
 
     }
 
     @Override
     public void DiscardBtnHandler() {
-        if(_displayedCustomer == null){
-            setCenterAnchor(viewApptsPane);
+        if(DisplayedCustomer == null){
+            sceneChanger.ChangeScene(HomepageFxml);
             return;
         }
-        populateCustomerPane(_displayedCustomer);
-
+        initialize();
     }
 
-    @FXML
-    public void initialize() {
-
+    @Override
+    public void DeleteBtnHandler() {
+        if(yesNoModalDialog("Delete customer?")) {
+            customerDAO.delete(DisplayedCustomer);
+        }
     }
 }

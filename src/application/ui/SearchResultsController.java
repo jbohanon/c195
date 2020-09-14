@@ -1,6 +1,6 @@
 package application.ui;
 
-import application.Main;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -14,45 +14,36 @@ public class SearchResultsController {
 
     public ListView<String> searchResultsList;
     public Label searchResultsLabel;
-    private boolean _isCustomer = false;
-    private boolean _isAppt = false;
 
     @FXML
-    public void initialize() {
-        if(app.getScene().equals(custPage)) {
-            _isCustomer = true;
-        } else if(app.getScene().equals(apptPage)) {
-            _isAppt
-        }
+    private void initialize() {
+        searchResultsList.setItems(FXCollections.observableArrayList(SearchResults));
+        // TODO localization
     }
-
 
     public void SearchResultsListKeyPressHandler(KeyEvent e) {
         if(e.getCode() == KeyCode.ENTER) {
-            if(CustSearchResults.size() > 0) {
-                CustomerSearchResults();
+            if(searchType == SEARCH_TYPE.CUST) {
+                CustomerSelected();
             } else {
-                AppointmentSearchResults();
+                AppointmentSelected();
             }
         }
     }
 
-    private void CustomerSearchResults() {
-//        setCenterAnchor(customerPane);
+    private void CustomerSelected() {
         CustSearchResults.values().forEach(customer -> {
-            if(searchResultsList.getSelectionModel().getSelectedItem().toString().contains(customer.getCustomerName())) {
+            if(searchResultsList.getSelectionModel().getSelectedItem().contains(customer.getCustomerName())) {
                 DisplayedCustomer = customer;
             }
         });
-        app.setScene(custPage);
-//        populateCustomerPane(_displayedCustomer);
+        sceneChanger.ChangeScene(CustomerPageFxml);
         CustSearchResults.clear();
     }
 
-    private void AppointmentSearchResults() {
-//        setCenterAnchor(apptPane);
+    private void AppointmentSelected() {
         ApptSearchResults.values().forEach(appt -> {
-            String selStr = searchResultsList.getSelectionModel().getSelectedItem().toString();
+            String selStr = searchResultsList.getSelectionModel().getSelectedItem();
             if (
                     selStr.contains(appt.getCustomer().getCustomerName()) &&
                     selStr.contains(appt.getTitle()) &&
@@ -61,8 +52,7 @@ public class SearchResultsController {
                 DisplayedAppointment = appt;
             }
         });
-        app.setScene(apptPage);
-//        populateCustomerPane(_displayedCustomer);
+        sceneChanger.ChangeScene(AppointmentPageFxml);
         ApptSearchResults.clear();
     }
 }

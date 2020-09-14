@@ -19,10 +19,10 @@
         <Label fx:id="custAddr1Label" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="67.0" prefHeight="27.0" prefWidth="95.0" text="Address Line 1" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="120.0" />
         <TextField fx:id="custAddr1Text" layoutX="129.0" layoutY="62.0" prefWidth="200.0" promptText="Customer Address Line 1" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="120.0" />
         <CheckBox fx:id="custActiveCheckbox" disable="true" graphicTextGap="5.0" layoutX="115.0" layoutY="162.0" mnemonicParsing="false" prefWidth="60.0" selected="true" text="Active" AnchorPane.bottomAnchor="105.0" AnchorPane.leftAnchor="145.0" />
-        <Button fx:id="custBackBtn" layoutX="48.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#BackBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Back" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="75.0" />
-        <Button fx:id="custEditBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#EditBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Edit" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="145.0" />
-        <Button fx:id="custSaveBtn" layoutX="236.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#SaveBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Save" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="215.0" />
-        <Button fx:id="custDiscardBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" onMouseClicked="#DiscardBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Discard" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="145.0" />
+        <Button fx:id="custBackBtn" layoutX="48.0" layoutY="194.0" mnemonicParsing="false" onAction="#BackBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Back" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="75.0" />
+        <Button fx:id="custEditBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" onAction="#EditBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Edit" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="145.0" />
+        <Button fx:id="custSaveBtn" layoutX="236.0" layoutY="194.0" mnemonicParsing="false" onAction="#SaveBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Save" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="215.0" />
+        <Button fx:id="custDiscardBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" onAction="#DiscardBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Discard" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="145.0" />
         <Label fx:id="custAddr2Label" alignment="CENTER_RIGHT" layoutX="23.0" layoutY="167.0" prefHeight="27.0" prefWidth="95.0" text="Address Line 2" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="155.0" />
         <TextField fx:id="custAddr2Text" layoutX="127.0" layoutY="162.0" prefWidth="200.0" promptText="Customer Address Line 2 (opt)" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="155.0" />
         <Label fx:id="custCityLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="188.0" prefHeight="27.0" prefWidth="95.0" text="City" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="190.0" />
@@ -31,7 +31,7 @@
         <TextField fx:id="custCountryText" layoutX="135.0" layoutY="204.0" prefWidth="200.0" promptText="Customer Country" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="225.0" />
         <Label fx:id="custPostalCodeLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="262.0" prefHeight="27.0" prefWidth="95.0" text="Postal Code" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="260.0" />
         <TextField fx:id="custPostalCodeText" layoutX="125.0" layoutY="268.0" prefWidth="200.0" promptText="Customer Postal Code" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="260.0" />
-        <Button fx:id="custDeleteBtn" layoutX="148.0" layoutY="401.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Delete">
+        <Button fx:id="custDeleteBtn" layoutX="148.0" layoutY="401.0" mnemonicParsing="false" style="-fx-background-color: red;" text="Delete" onAction="#DeleteBtnHandler">
             <font>
                 <Font name="System Bold" size="13.0" />
             </font>

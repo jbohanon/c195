@@ -8,4 +8,5 @@ public interface EditablePaneBehavior<T> {
     void BackBtnHandler();
     void SaveBtnHandler();
     void DiscardBtnHandler();
+    void DeleteBtnHandler();
 }

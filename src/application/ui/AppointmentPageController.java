@@ -7,6 +7,7 @@ import application.datamodel.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -39,8 +40,10 @@ public class AppointmentPageController implements EditablePaneBehavior<Appointme
     public RadioButton apptType1Radio;
     public RadioButton apptType2Radio;
     public RadioButton apptType3Radio;
-    public DatePicker apptStartTimePicker;
     public DatePicker apptEndTimePicker;
+    public DatePicker apptStartDatePicker;
+    public TimeField apptStartTimeField;
+    public TimeField apptEndTimeField;
 
     @FXML
     private void initialize() {
@@ -77,15 +80,22 @@ public class AppointmentPageController implements EditablePaneBehavior<Appointme
     @Override
     public void SaveBtnHandler() {
         SetEditable(false);
-        if(DisplayedCustomer == null) {
-            getCustomerFromField(apptCustNameText.getText());
-        }
+
         if(DisplayedAppointment == null) {
+            getCustomerFromField(apptCustNameText.getText());
             Appointment newAppointment = new Appointment(0,
                     DisplayedCustomer.getCustomerId(),
                     (userDAO.lookup(loggedInUser).orElse(User.nullUser())).getUserId(),
+                    apptTitleText.getText(),
+                    apptDescText.getText(),
+                    apptLocationText.getText(),
+                    apptContactText.getText(),
+                    apptType1Radio.isSelected() ? "type_1" : (apptType2Radio.isSelected() ? "type_2" : "type_3"),
+                    apptUrlText.getText(),
+                    apptStartTimePicker.getValue(),
+                    apptEndTimePicker.getValue()
                     // TODO FIX ME!!
-                    custActiveCheckbox.isSelected());
+                    );
 
             if(!appointmentDAO.insert(newAppointment)) {
                 okModalDialog("Issue writing new appointment to database.");

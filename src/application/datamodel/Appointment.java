@@ -162,7 +162,7 @@ public class Appointment {
                 _end.toString());
     }
 
-    public String apptTypeToString(APPT_TYPE type) {
+    public static String apptTypeToString(APPT_TYPE type) {
         switch (type) {
             case TYPE_1: return "type_1";
             case TYPE_2: return "type_2";
@@ -171,7 +171,7 @@ public class Appointment {
         }
     }
 
-    public APPT_TYPE apptTypeFromString(String type) {
+    public static APPT_TYPE apptTypeFromString(String type) {
         switch (type) {
             case "type_1": return APPT_TYPE.TYPE_1;
             case "type_2": return APPT_TYPE.TYPE_2;

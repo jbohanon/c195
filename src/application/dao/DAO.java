@@ -9,4 +9,5 @@ public interface DAO<T> {
     boolean insert(T t);
     boolean update(T t);
     boolean delete(T t);
+    public T GetOptionalOrThrow(Optional<T> optionalT);
 }

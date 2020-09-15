@@ -19,9 +19,9 @@ public class ApplicationController {
     public static CustomerDAO customerDAO = new CustomerDAO();
     public static UserDAO userDAO = new UserDAO();
 
-    public static Customer DisplayedCustomer;
+    public static Customer DisplayedCustomer = null;
     public static boolean CustEditable;
-    public static Appointment DisplayedAppointment;
+    public static Appointment DisplayedAppointment = null;
     public static boolean ApptEditable;
     public static ArrayList<String> SearchResults = new ArrayList<>();
     public static SceneChanger sceneChanger = new SceneChanger();

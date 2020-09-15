@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static application.dao.Database.dbUpdate;
 import static application.ui.ApplicationController.loggedInUser;
@@ -103,5 +104,14 @@ public class AppointmentDAO implements DAO<Appointment> {
     public boolean delete(Appointment appointment) {
         String s = "DELETE FROM appointment WHERE appointmentId=" + appointment.getAppointmentId();
         return dbUpdate(s);
+    }
+
+    @Override
+    public Appointment GetOptionalOrThrow(Optional<Appointment> optionalAppointment) {
+        return optionalAppointment.orElseThrow(() -> new RuntimeException("No appointment contained in Optional<Appointment>"));
+    }
+
+    public Appointment lookupAndSetAppointmentId(Appointment newAppointment) {
+        return Appointment.nullAppt();
     }
 }

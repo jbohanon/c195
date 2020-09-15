@@ -7,9 +7,11 @@ import application.datamodel.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import static application.Main.SearchResultsFxml;
 import static application.ui.ApplicationController.*;
@@ -40,10 +42,12 @@ public class AppointmentPageController implements EditablePaneBehavior<Appointme
     public RadioButton apptType1Radio;
     public RadioButton apptType2Radio;
     public RadioButton apptType3Radio;
-    public DatePicker apptEndTimePicker;
     public DatePicker apptStartDatePicker;
     public TimeField apptStartTimeField;
+    public DatePicker apptEndDatePicker;
     public TimeField apptEndTimeField;
+
+    private Appointment _editedAppointment;
 
     @FXML
     private void initialize() {
@@ -85,16 +89,16 @@ public class AppointmentPageController implements EditablePaneBehavior<Appointme
             getCustomerFromField(apptCustNameText.getText());
             Appointment newAppointment = new Appointment(0,
                     DisplayedCustomer.getCustomerId(),
-                    (userDAO.lookup(loggedInUser).orElse(User.nullUser())).getUserId(),
+                    userDAO.GetOptionalOrThrow(userDAO.lookup(loggedInUser)).getUserId(),
                     apptTitleText.getText(),
                     apptDescText.getText(),
                     apptLocationText.getText(),
                     apptContactText.getText(),
                     apptType1Radio.isSelected() ? "type_1" : (apptType2Radio.isSelected() ? "type_2" : "type_3"),
                     apptUrlText.getText(),
-                    apptStartTimePicker.getValue(),
-                    apptEndTimePicker.getValue()
-                    // TODO FIX ME!!
+                    LocalDateTime.of(apptStartDatePicker.getValue(), apptStartTimeField.getLocalTime()).toString(),
+                    LocalDateTime.of(apptEndDatePicker.getValue(), apptEndTimeField.getLocalTime()).toString()
+                    // TODO TRY/CATCH for RuntimeException
                     );
 
             if(!appointmentDAO.insert(newAppointment)) {
@@ -106,16 +110,16 @@ public class AppointmentPageController implements EditablePaneBehavior<Appointme
         } else {
             _editedAppointment = new Appointment(
                     DisplayedAppointment.getAppointmentId(),
-                    custNameText.getText(),
-                    new Address(DisplayedAppointment.getAddress().getAddressId(),
-                            custAddr1Text.getText(),
-                            custAddr2Text.getText(),
-                            custCityText.getText(),
-                            custPostalCodeText.getText(),
-                            custPhoneText.getText(),
-                            custCountryText.getText()
-                    ),
-                    custActiveCheckbox.isSelected());
+                    DisplayedCustomer.getCustomerId(),
+                    userDAO.GetOptionalOrThrow(userDAO.lookup(loggedInUser)).getUserId(),
+                    apptTitleText.getText(),
+                    apptDescText.getText(),
+                    apptLocationText.getText(),
+                    apptContactText.getText(),
+                    apptType1Radio.isSelected() ? "type_1" : (apptType2Radio.isSelected() ? "type_2" : "type_3"),
+                    apptUrlText.getText(),
+                    LocalDateTime.of(apptStartDatePicker.getValue(), apptStartTimeField.getLocalTime()).toString(),
+                    LocalDateTime.of(apptEndDatePicker.getValue(), apptEndTimeField.getLocalTime()).toString());
 
             if(!appointmentDAO.update(_editedAppointment)) {
                 okModalDialog("Issue writing edited appointment to database.");

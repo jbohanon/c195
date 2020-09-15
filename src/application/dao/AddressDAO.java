@@ -82,6 +82,11 @@ public class AddressDAO implements DAO<Address> {
         return false;
     }
 
+    @Override
+    public Address GetOptionalOrThrow(Optional<Address> optionalAddress) {
+        return optionalAddress.orElseThrow(() -> new RuntimeException("No address contained in Optional<Address>"));
+    }
+
     public int lookupAndSetAddressId(Address a) {
         String s = "SELECT addressId FROM address WHERE " +
                 "address='" + a.getAddress() +

@@ -1,6 +1,7 @@
 package application.dao;
 
 import application.Main;
+import application.datamodel.Address;
 import application.datamodel.City;
 import application.datamodel.Country;
 
@@ -123,5 +124,10 @@ public class CityDAO implements DAO<City> {
     @Override
     public boolean delete(City city) {
         return false;
+    }
+
+    @Override
+    public City GetOptionalOrThrow(Optional<City> optionalCity) {
+        return optionalCity.orElseThrow(() -> new RuntimeException("No city contained in Optional<City>"));
     }
 }

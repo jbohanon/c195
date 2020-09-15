@@ -167,4 +167,8 @@ public class TimeField extends TextField {
     public TimeField() {
         this(LocalTime.now());
     }
+
+    public LocalTime getLocalTime() {
+        return _timeValue;
+    }
 }

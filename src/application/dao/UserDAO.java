@@ -1,6 +1,7 @@
 package application.dao;
 
 import application.Main;
+import application.datamodel.Appointment;
 import application.datamodel.User;
 
 import java.sql.ResultSet;
@@ -8,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class UserDAO implements DAO<User> {
     @Override
@@ -58,5 +60,10 @@ public class UserDAO implements DAO<User> {
     // Not implemented
     public boolean delete(User user) {
         return false;
+    }
+
+    @Override
+    public User GetOptionalOrThrow(Optional<User> optionalUser) {
+        return optionalUser.orElseThrow(() -> new RuntimeException("No user contained in Optional<User>"));
     }
 }

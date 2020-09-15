@@ -1,6 +1,7 @@
 package application.dao;
 
 import application.Main;
+import application.datamodel.Address;
 import application.datamodel.Country;
 import application.ui.ApplicationController;
 
@@ -90,5 +91,10 @@ public class CountryDAO implements DAO<Country> {
     @Override
     public boolean delete(Country country) {
         return false;
+    }
+
+    @Override
+    public Country GetOptionalOrThrow(Optional<Country> optionalCountry) {
+        return optionalCountry.orElseThrow(() -> new RuntimeException("No country contained in Optional<Country>"));
     }
 }

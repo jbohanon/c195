@@ -1,6 +1,7 @@
 package application.dao;
 
 import application.Main;
+import application.datamodel.Address;
 import application.datamodel.Customer;
 import application.ui.DialogController;
 
@@ -66,6 +67,11 @@ public class CustomerDAO implements DAO<Customer> {
     public boolean delete(Customer customer) {
         String s = "DELETE FROM CUSTOMER WHERE customerId=" + customer.getCustomerId();
         return Database.dbUpdate(s);
+    }
+
+    @Override
+    public Customer GetOptionalOrThrow(Optional<Customer> optionalCustomer) {
+        return optionalCustomer.orElseThrow(() -> new RuntimeException("No customer contained in Optional<Customer>"));
     }
 
     public ArrayList<Customer> search(String name) {

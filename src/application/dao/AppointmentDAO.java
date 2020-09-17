@@ -19,7 +19,7 @@ public class AppointmentDAO implements DAO<Appointment> {
         try {
             Statement stmt = Main.dbConn.createStatement();
             String s = String.format("SELECT appointmentId, customerId, userId, title, description, location, contact, type, url, start, end FROM appointment WHERE " +
-                    "customerId=(SELECT customerId FROM customer WHERE customerName LIKE '%%%s%%') OR " +
+                    "customerId=(SELECT MIN(customerId) FROM customer WHERE customerName LIKE '%%%s%%') OR " +
                     "title LIKE '%%%s%%' OR " +
                     "description LIKE '%%%s%%' OR " +
                     "location LIKE '%%%s%%' OR " +

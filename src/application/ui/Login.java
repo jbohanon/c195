@@ -23,11 +23,6 @@ public class Login {
 
     private static final boolean debugMode = true;
 
-//    private static final Locale usingLocale = Localization.getLocale();
-
-    // DEBUG LOCALES
-//        private static final Locale usingLocale = Locale.US;
-    private static final Locale usingLocale = Locale.CANADA_FRENCH;
     @FXML
     private VBox loginVBox;
 
@@ -64,14 +59,13 @@ public class Login {
             passText.setText("test");
 //            attemptLogin();
         }
-        Locale.setDefault(usingLocale);
-        loginLabel.setText(Localization.getLocalizedString("loginLabel", Localization.RESOURCE_BUNDLE.LOGIN));
+//        loginLabel.setText(Localization.getLocalizedString("loginLabel", Localization.RESOURCE_BUNDLE.LOGIN));
         loginLabel.relocate(loginVBox.getLayoutX() + (loginVBox.getWidth()-loginLabel.getWidth())/2, loginLabel.getLayoutY());
-        userText.setPromptText(Localization.getLocalizedString("userPrompt", Localization.RESOURCE_BUNDLE.LOGIN));
-        passText.setPromptText(Localization.getLocalizedString("passPrompt", Localization.RESOURCE_BUNDLE.LOGIN));
-        loginGoBtn.setText(Localization.getLocalizedString("loginGoBtn", Localization.RESOURCE_BUNDLE.LOGIN));
-        loginExitBtn.setText(Localization.getLocalizedString("loginExitBtn", Localization.RESOURCE_BUNDLE.LOGIN));
-        badCredsLabel.setText(Localization.getLocalizedString("badCredsLabel", Localization.RESOURCE_BUNDLE.LOGIN));
+//        userText.setPromptText(Localization.getLocalizedString("userPrompt", Localization.RESOURCE_BUNDLE.LOGIN));
+//        passText.setPromptText(Localization.getLocalizedString("passPrompt", Localization.RESOURCE_BUNDLE.LOGIN));
+//        loginGoBtn.setText(Localization.getLocalizedString("loginGoBtn", Localization.RESOURCE_BUNDLE.LOGIN));
+//        loginExitBtn.setText(Localization.getLocalizedString("loginExitBtn", Localization.RESOURCE_BUNDLE.LOGIN));
+//        badCredsLabel.setText(Localization.getLocalizedString("badCredsLabel", Localization.RESOURCE_BUNDLE.LOGIN));
     }
 
     private static void exitApp() {

@@ -18,31 +18,31 @@
             <VBox style="-fx-padding: 15 0 0 0;" fx:id="loginVBox" prefHeight="200" prefWidth="200">
                 <HBox style="-fx-padding: 5 5 5 5;" alignment="CENTER">
                     <Label fx:id="loginLabel" alignment="CENTER" layoutX="60.0" layoutY="14.0" prefHeight="17.0"
-                           prefWidth="95.0" text="Login" textAlignment="CENTER" AnchorPane.topAnchor="10.0">
+                           prefWidth="95.0" text="%loginLabel" textAlignment="CENTER" AnchorPane.topAnchor="10.0">
                         <font>
                             <Font size="18.0"/>
                         </font>
                     </Label>
                 </HBox>
                 <HBox style="-fx-padding: 5 5 5 5;" alignment="CENTER">
-                    <TextField fx:id="userText" layoutX="20.0" layoutY="47.0" onKeyPressed="#loginOnKeyPressedHandler"/>
+                    <TextField fx:id="userText" promptText="%userPrompt" layoutX="20.0" layoutY="47.0" onKeyPressed="#loginOnKeyPressedHandler"/>
                 </HBox>
                 <HBox style="-fx-padding: 5 5 5 5;" alignment="CENTER">
-                    <PasswordField fx:id="passText" layoutX="20.0" layoutY="87.0" onKeyPressed="#loginOnKeyPressedHandler"/>
+                    <PasswordField fx:id="passText" promptText="%passPrompt" layoutX="20.0" layoutY="87.0" onKeyPressed="#loginOnKeyPressedHandler"/>
                 </HBox>
                 <HBox style="-fx-padding: 5 5 5 5;" alignment="CENTER">
                     <VBox style="-fx-padding: 0 5 0 0;">
                         <Button fx:id="loginGoBtn" layoutX="49.0" layoutY="123.0" mnemonicParsing="false"
-                                onMouseClicked="#loginGoBtnHandler" text="Go"/>
+                                onMouseClicked="#loginGoBtnHandler" text="%loginGoBtn"/>
                     </VBox>
                     <VBox style="-fx-padding: 0 0 0 5;">
                         <Button fx:id="loginExitBtn" layoutX="116.0" layoutY="123.0" mnemonicParsing="false"
-                                onMouseClicked="#loginExitBtnHandler" text="Exit"/>
+                                onMouseClicked="#loginExitBtnHandler" text="%loginExitBtn"/>
                     </VBox>
                 </HBox>
                 <HBox style="-fx-padding: 5 5 5 5;" alignment="CENTER">
                     <Label fx:id="badCredsLabel" alignment="CENTER" layoutX="6.0" layoutY="154.0" prefHeight="38.0"
-                           prefWidth="186.0" textAlignment="CENTER" textFill="#d70808"
+                           prefWidth="186.0" textAlignment="CENTER" textFill="#d70808" text="%badCredsLabel"
                            visible="false" wrapText="true"/>
                 </HBox>
             </VBox>

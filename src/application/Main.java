@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Locale;
 
 import static application.localization.Localization.getLocalizedString;
 
@@ -29,8 +30,18 @@ public class Main extends javafx.application.Application {
         Platform.exit();
     }
 
+
+//    private static final Locale usingLocale = Localization.getLocale();
+
+    // DEBUG LOCALES
+//        private static final Locale usingLocale = Locale.US;
+    private static final Locale usingLocale = Locale.CANADA_FRENCH;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+
+        Locale.setDefault(usingLocale);
 
         dbConn = Database.connectToDatabase();
         if(!Database.testDbConn(dbConn)) {
@@ -42,7 +53,7 @@ public class Main extends javafx.application.Application {
 
         Application.sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
 
-        login = FXMLLoader.load(getClass().getResource("ui/login.fxml"));
+        login = FXMLLoader.load(getClass().getResource("ui/login.fxml"), Localization.RESOURCE_BUNDLE.LOGIN.Get());
         login.show();
     }
 

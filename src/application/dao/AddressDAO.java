@@ -3,13 +3,12 @@ package application.dao;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.Optional;
 
 import application.Main;
 import application.datamodel.*;
 
-import static application.ui.ApplicationController.loggedInUser;
+import static application.ui.Application.loggedInUser;
 
 public class AddressDAO implements DAO<Address> {
     @Override
@@ -83,8 +82,8 @@ public class AddressDAO implements DAO<Address> {
     }
 
     @Override
-    public Address GetOptionalOrThrow(Optional<Address> optionalAddress) {
-        return optionalAddress.orElseThrow(() -> new RuntimeException("No address contained in Optional<Address>"));
+    public Address GetOptionalOrThrow(Optional<Address> optionalAddress) throws Exception{
+        return optionalAddress.orElseThrow(() -> new Exception("No address contained in Optional<Address>"));
     }
 
     public int lookupAndSetAddressId(Address a) {

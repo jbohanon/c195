@@ -1,13 +1,15 @@
 package application.datamodel;
 
-import application.dao.AddressDAO;
+import application.ui.DialogController;
+
+import static application.ui.Application.addressDAO;
 
 public class Customer {
     private int _customerId;
     private String _customerName;
     private boolean _active;
     private Address _address;
-    private final static AddressDAO addressDAO = new AddressDAO();
+//    private final static AddressDAO addressDAO = new AddressDAO();
 
     public Customer(int customerId, String customerName, int addressId, boolean active){
         _customerId = customerId;
@@ -59,7 +61,12 @@ public class Customer {
     }
 
     public void setAddress(int addressId) {
-        _address = addressDAO.lookup(addressId).orElse(Address.nullAddress());
+        try {
+            _address = addressDAO.GetOptionalOrThrow(addressDAO.lookup(addressId));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            DialogController.okModalDialog(ex.toString());
+        }
     }
     
     public void setAddress(Address address) {

@@ -1,24 +1,31 @@
 package application.datamodel;
 
-import application.dao.CountryDAO;
+import application.ui.DialogController;
+
+import static application.ui.Application.countryDAO;
 
 public class Country {
     private int _countryId;
     private String _country;
-    private final CountryDAO countryDAO = new CountryDAO();
+//    private final CountryDAO countryDAO = new CountryDAO();
 
     public Country(int countryId, String country) {
         _countryId = countryId;
         _country = country;
     }
 
-    public Country(int countryId) throws Exception {
-        Country c = countryDAO.lookup(countryId).orElse(nullCountry());
-        if(c.getCountryId() > 0) {
-            _countryId = countryId;
-            _country = c.getCountry();
-        } else {
-            throw new Exception("Error finding country by countryId");
+    public Country(int countryId) {
+        try {
+            Country c = countryDAO.GetOptionalOrThrow(countryDAO.lookup(countryId));
+            if(c.getCountryId() > 0) {
+                _countryId = countryId;
+                _country = c.getCountry();
+            } else {
+                throw new RuntimeException("Error finding country by countryId");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            DialogController.okModalDialog(ex.toString());
         }
     }
 
@@ -59,12 +66,12 @@ public class Country {
 //        }
 //
 //        // Country not found handling
-//        if(ApplicationController.yesNoModalDialog("Country " + country + " not found. Add it to database?")) {
+//        if(Application.yesNoModalDialog("Country " + country + " not found. Add it to database?")) {
 //            if(addCountry(country)){
-//                ApplicationController.okModalDialog("Success.");
+//                Application.okModalDialog("Success.");
 //                return lookupCountry(country);
 //            } else {
-//                ApplicationController.okModalDialog("Error adding country to database.");
+//                Application.okModalDialog("Error adding country to database.");
 //            }
 //        }
 //        return nullCountry();

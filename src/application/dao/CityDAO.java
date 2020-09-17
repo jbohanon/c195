@@ -1,18 +1,17 @@
 package application.dao;
 
 import application.Main;
-import application.datamodel.Address;
 import application.datamodel.City;
 import application.datamodel.Country;
+import application.ui.DialogController;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.Optional;
 
 import static application.dao.Database.dbUpdate;
-import static application.ui.ApplicationController.*;
+import static application.ui.Application.*;
 import static application.ui.DialogController.okModalDialog;
 import static application.ui.DialogController.yesNoModalDialog;
 
@@ -96,18 +95,23 @@ public class CityDAO implements DAO<City> {
     }
 
     public boolean insert(String city, String countryStr) {
-        boolean ret;
-        Country c = countryDAO.lookup(countryStr).orElse(Country.nullCountry());
-        String s = "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('" +
-                city +
-                "', " +
-                c.getCountryId() +
-                ", now(), '" +
-                loggedInUser +
-                "', now(), '" +
-                loggedInUser +
-                "')";
-        ret = dbUpdate(s);
+        boolean ret = false;
+        try {
+            Country c = countryDAO.GetOptionalOrThrow(countryDAO.lookup(countryStr));
+            String s = "INSERT INTO city (city, countryId, createDate, createdBy, lastUpdate, lastUpdateBy) VALUES ('" +
+                    city +
+                    "', " +
+                    c.getCountryId() +
+                    ", now(), '" +
+                    loggedInUser +
+                    "', now(), '" +
+                    loggedInUser +
+                    "')";
+            ret = dbUpdate(s);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            DialogController.okModalDialog(ex.toString());
+        }
         String s1 =
                 ret ?
                         "Successfully added city." :
@@ -127,7 +131,7 @@ public class CityDAO implements DAO<City> {
     }
 
     @Override
-    public City GetOptionalOrThrow(Optional<City> optionalCity) {
-        return optionalCity.orElseThrow(() -> new RuntimeException("No city contained in Optional<City>"));
+    public City GetOptionalOrThrow(Optional<City> optionalCity) throws Exception {
+        return optionalCity.orElseThrow(() -> new Exception("No city contained in Optional<City>"));
     }
 }

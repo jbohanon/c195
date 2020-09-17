@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
-<Stage xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.LoginController">
+<Stage xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.Login">
     <scene>
         <Scene>
             <VBox style="-fx-padding: 15 0 0 0;" fx:id="loginVBox" prefHeight="200" prefWidth="200">

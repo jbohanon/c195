@@ -1,7 +1,6 @@
 package application.dao;
 
 import application.Main;
-import application.datamodel.Address;
 import application.datamodel.Customer;
 import application.ui.DialogController;
 
@@ -11,15 +10,35 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Optional;
 
-import static application.ui.ApplicationController.loggedInUser;
+import static application.ui.Application.addressDAO;
+import static application.ui.Application.loggedInUser;
 import static application.ui.DialogController.okModalDialog;
 
 public class CustomerDAO implements DAO<Customer> {
-    private final AddressDAO addressDAO = new AddressDAO();
+//    private final AddressDAO addressDAO = new AddressDAO();
 
     @Override
-    // Not implemented
     public Optional<Customer> lookup(int id) {
+        try {
+            Statement stmt = Main.dbConn.createStatement();
+            String s = "SELECT customerName, addressId, active FROM customer WHERE customerId=" + id;
+            System.out.println("Executing " + s);
+            ResultSet rs = stmt.executeQuery(s);
+            if(rs.next()) {
+                Customer c = new Customer(
+//                        rs.getInt("customerId"),
+                        id,
+                        rs.getString("customerName"),
+                        addressDAO.GetOptionalOrThrow(addressDAO.lookup(rs.getInt("addressId"))),
+                        rs.getBoolean("active")
+                );
+                System.out.println("Customer " + c.getCustomerName() + " with Id " + c.getCustomerId() + " found.");
+                return Optional.of(c);
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return Optional.empty();
     }
 
@@ -70,8 +89,8 @@ public class CustomerDAO implements DAO<Customer> {
     }
 
     @Override
-    public Customer GetOptionalOrThrow(Optional<Customer> optionalCustomer) {
-        return optionalCustomer.orElseThrow(() -> new RuntimeException("No customer contained in Optional<Customer>"));
+    public Customer GetOptionalOrThrow(Optional<Customer> optionalCustomer) throws Exception {
+        return optionalCustomer.orElseThrow(() -> new Exception("No customer contained in Optional<Customer>"));
     }
 
     public ArrayList<Customer> search(String name) {

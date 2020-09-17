@@ -1,13 +1,11 @@
 package application.datamodel;
 
-import application.dao.CityDAO;
-import application.dao.CountryDAO;
+import application.ui.DialogController;
+import static application.ui.Application.*;
 
 public class City {
     private String _city;
     private Country _country;
-    private final static CountryDAO countryDAO = new CountryDAO();
-    private final static CityDAO cityDAO = new CityDAO();
 
     public City(String city) {
         _city = city;
@@ -41,11 +39,21 @@ public class City {
     }
 
     public void setCountry(int countryId) {
-        _country = countryDAO.lookup(countryId).orElse(Country.nullCountry());
+        try {
+        _country = countryDAO.GetOptionalOrThrow(countryDAO.lookup(countryId));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            DialogController.okModalDialog(ex.toString());
+        }
     }
 
     public void setCountry(String city) {
-        _country = countryDAO.lookup(city).orElse(Country.nullCountry());
+        try {
+        _country = countryDAO.GetOptionalOrThrow(countryDAO.lookup(city));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            DialogController.okModalDialog(ex.toString());
+        }
     }
 
 

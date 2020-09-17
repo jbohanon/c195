@@ -1,14 +1,10 @@
 package application;
 
 import application.dao.Database;
-import application.datamodel.Customer;
 import application.localization.Localization;
-import application.ui.ApplicationController;
-import application.ui.LoginController;
-import javafx.application.Application;
+import application.ui.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -16,12 +12,7 @@ import java.sql.SQLException;
 
 import static application.localization.Localization.getLocalizedString;
 
-public class Main extends Application {
-
-    public static final String HomepageFxml = "ui/homepage.fxml";
-    public static final String AppointmentPageFxml = "ui/appointmentPage.fxml";
-    public static final String CustomerPageFxml = "ui/customerPage.fxml";
-    public static final String SearchResultsFxml = "ui/searchResults.fxml";
+public class Main extends javafx.application.Application {
 
     public static Connection dbConn;
     public static Stage login;
@@ -49,7 +40,7 @@ public class Main extends Application {
 
         app = FXMLLoader.load(getClass().getResource("ui/application.fxml"));
 
-        ApplicationController.sceneChanger.ChangeScene(HomepageFxml);
+        Application.sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
 
         login = FXMLLoader.load(getClass().getResource("ui/login.fxml"));
         login.show();
@@ -61,6 +52,6 @@ public class Main extends Application {
 
 
     public static String getStr(String propertyLabel) {
-        return getLocalizedString(propertyLabel, Localization.RESOURCE_BUNDLE.APP);
+        return getLocalizedString(propertyLabel, Localization.RESOURCE_BUNDLE.APPLICATION);
     }
 }

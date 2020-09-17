@@ -1,7 +1,7 @@
 package application.ui;
 
 import static application.Main.*;
-import static application.ui.ApplicationController.*;
+import static application.ui.Application.*;
 
 import application.datamodel.Appointment;
 import application.datamodel.Customer;
@@ -13,7 +13,7 @@ import javafx.scene.control.*;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
-public class HomepageController {
+public class Homepage {
 
     // FXML Fields
     public Button exitBtn;
@@ -46,7 +46,7 @@ public class HomepageController {
         if(_custSearchResults.size()==1) {
             DisplayedCustomer = _custSearchResults.get(0);
             CustEditable = false;
-            sceneChanger.ChangeScene(CustomerPageFxml);
+            sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.CUSTOMER_PAGE);
             return;
         }
 
@@ -62,12 +62,12 @@ public class HomepageController {
             SearchResults.addAll(displayResults);
         }
         searchType = SEARCH_TYPE.CUST;
-        sceneChanger.ChangeScene(SearchResultsFxml);
+        sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.SEARCH_RESULTS);
     }
 
     public void addCustomerBtnHandler() {
         CustEditable = true;
-        sceneChanger.ChangeScene(CustomerPageFxml);
+        sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.CUSTOMER_PAGE);
     }
 
     public void apptSearchGoBtnHandler() {
@@ -77,7 +77,7 @@ public class HomepageController {
         if(_apptSearchResults.size()==1) {
             DisplayedAppointment = _apptSearchResults.get(0);
             ApptEditable = false;
-            sceneChanger.ChangeScene(AppointmentPageFxml);
+            sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.APPOINTMENT_PAGE);
             return;
         }
 
@@ -92,12 +92,12 @@ public class HomepageController {
             SearchResults.addAll(FXCollections.observableArrayList(displayResults));
         }
         searchType = SEARCH_TYPE.APPT;
-        sceneChanger.ChangeScene(SearchResultsFxml);
+        sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.SEARCH_RESULTS);
     }
 
     public void addAppointmentBtnHandler() {
-        CustEditable = true;
-        sceneChanger.ChangeScene(CustomerPageFxml);
+        ApptEditable = true;
+        sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.APPOINTMENT_PAGE);
     }
 
     public void exitApp() {

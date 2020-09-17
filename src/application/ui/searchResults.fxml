@@ -2,30 +2,42 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Scene?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<Scene xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
-       fx:controller="application.ui.SearchResultsController">
+<Scene xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.SearchResults">
     <AnchorPane fx:id="searchResultPane" prefHeight="442.0" prefWidth="394.0">
-        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-              AnchorPane.topAnchor="0.0">
-            <HBox alignment="CENTER">
-                <Label fx:id="searchResultsLabel" alignment="CENTER" layoutX="14.0" layoutY="14.0" text="Search Results"
-                       textAlignment="CENTER"/>
+        <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox alignment="CENTER_LEFT" spacing="140.0">
+            <VBox fillWidth="false" spacing="50.0">
+               <children>
+                  <Button fx:id="searchResultsBackBtn" mnemonicParsing="false" text="Back" />
+               </children>
+               <padding>
+                  <Insets right="50.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER_RIGHT">
+               <children>
+                      <Label fx:id="searchResultsLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Search Results" textAlignment="CENTER">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
                 <VBox.margin>
-                    <Insets top="15.0"/>
+                    <Insets left="15.0" right="15.0" top="15.0" />
                 </VBox.margin>
             </HBox>
-            <ListView fx:id="searchResultsList" layoutX="14.0" layoutY="40.0"
-                      onKeyPressed="#SearchResultsListKeyPressHandler" prefHeight="375.0" prefWidth="200.0"
-                      AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0"
-                      AnchorPane.topAnchor="50.0">
+            <ListView fx:id="searchResultsList" layoutX="14.0" layoutY="40.0" onKeyPressed="#SearchResultsListKeyPressHandler" prefHeight="375.0" prefWidth="200.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0">
                 <VBox.margin>
-                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                 </VBox.margin>
             </ListView>
         </VBox>

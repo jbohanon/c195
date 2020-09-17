@@ -1,6 +1,6 @@
 package application.ui;
 
-import application.datamodel.Customer;
+import application.localization.Localization;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -8,10 +8,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-import static application.Main.*;
-import static application.ui.ApplicationController.*;
+import static application.ui.Application.*;
 
-public class SearchResultsController {
+public class SearchResults {
 
     public ListView<String> searchResultsList;
     public Label searchResultsLabel;
@@ -25,14 +24,14 @@ public class SearchResultsController {
     public void SearchResultsListKeyPressHandler(KeyEvent e) {
         if(e.getCode() == KeyCode.ENTER) {
             switch (searchType) {
-                case CUST: CustomerSelected(CustomerPageFxml);
+                case CUST: CustomerSelected(Localization.RESOURCE_BUNDLE.CUSTOMER_PAGE);
                 case APPT: AppointmentSelected();
-                default: CustomerSelected(AppointmentPageFxml);
+                default: CustomerSelected(Localization.RESOURCE_BUNDLE.APPOINTMENT_PAGE);
             }
         }
     }
 
-    private void CustomerSelected(String nextScene) {
+    private void CustomerSelected(Localization.RESOURCE_BUNDLE nextScene) {
         CustSearchResults.values().forEach(customer -> {
             if(searchResultsList.getSelectionModel().getSelectedItem().contains(customer.getCustomerName())) {
                 DisplayedCustomer = customer;
@@ -53,7 +52,7 @@ public class SearchResultsController {
                 DisplayedAppointment = appt;
             }
         });
-        sceneChanger.ChangeScene(AppointmentPageFxml);
+        sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.APPOINTMENT_PAGE);
         ApptSearchResults.clear();
     }
 }

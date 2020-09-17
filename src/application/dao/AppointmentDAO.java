@@ -1,28 +1,61 @@
 package application.dao;
 
 import application.Main;
-import application.datamodel.Address;
 import application.datamodel.Appointment;
-import javafx.application.Application;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import static application.dao.Database.dbUpdate;
-import static application.ui.ApplicationController.loggedInUser;
+import static application.ui.Application.loggedInUser;
 
 public class AppointmentDAO implements DAO<Appointment> {
     public ArrayList<Appointment> search(String searchTerm) {
         ArrayList<Appointment> apptSearchResults = new ArrayList<>();
+        try {
+            Statement stmt = Main.dbConn.createStatement();
+            String s = String.format("SELECT appointmentId, customerId, userId, title, description, location, contact, type, url, start, end FROM appointment WHERE " +
+                    "customerId=(SELECT customerId FROM customer WHERE customerName LIKE '%%%s%%') OR " +
+                    "title LIKE '%%%s%%' OR " +
+                    "description LIKE '%%%s%%' OR " +
+                    "location LIKE '%%%s%%' OR " +
+                    "contact LIKE '%%%s%%' OR " +
+                    "url LIKE '%%%s%%'",
+                    searchTerm, searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
+            System.out.println("Executing " + s);
+            ResultSet rs = stmt.executeQuery(s);
+            if(rs.next()) {
+                do {
+                    Appointment a = new Appointment(
+                            rs.getInt("appointmentId"),
+                            rs.getInt("customerId"),
+                            rs.getInt("userId"),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getString("location"),
+                            rs.getString("contact"),
+                            rs.getString("type"),
+                            rs.getString("url"),
+                            rs.getString("start").replace(' ', 'T')
+                    );
+                    apptSearchResults.add(a);
+                    System.out.println(
+                            "Matched appointment with id " +
+                                    a.getAppointmentId() + ", user " +
+                                    a.getUser().getUserName() + ", customer " +
+                                    a.getCustomer().getCustomerName() + ", title " +
+                                    a.getTitle() + ", beginning at " +
+                                    a.getStart().toLocalDateTime().toString() + " and ending at " +
+                                    a.getEnd().toLocalDateTime().toString());
+                } while (rs.next());
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
 
         return apptSearchResults;
     }
@@ -45,16 +78,16 @@ public class AppointmentDAO implements DAO<Appointment> {
                         rs.getString("contact"),
                         rs.getString("type"),
                         rs.getString("url"),
-                        rs.getString("start"),
-                        rs.getString("end"));
+                        rs.getString("start")
+                        );
                 System.out.println(
                         "Matched appointment with id " +
                                 a.getAppointmentId() + ", user " +
                                 a.getUser().getUserName() + ", customer " +
                                 a.getCustomer().getCustomerName() + ", title " +
                                 a.getTitle() + ", beginning at " +
-                                a.getStart().toString() + " and ending at " +
-                                a.getEnd().toString());
+                                a.getStart().toLocalDateTime().toString() + " and ending at " +
+                                a.getEnd().toLocalDateTime().toString());
                 return Optional.of(a);
             }
         } catch (SQLException ex) {
@@ -77,9 +110,9 @@ public class AppointmentDAO implements DAO<Appointment> {
                 appointment.getContact() + "', '" +
                 appointment.getType().toString() + "', '" +
                 appointment.getUrl() + "', '" +
-                appointment.getStart().format(DateTimeFormatter.ISO_DATE_TIME) + "', '" +
-                appointment.getEnd().format(DateTimeFormatter.ISO_DATE_TIME) + "', " +
-                "now(), " + loggedInUser + ", now(), " + loggedInUser + ")";
+                appointment.getStart().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', '" +
+                appointment.getEnd().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', " +
+                "now(), '" + loggedInUser + "', now(), '" + loggedInUser + "')";
         return dbUpdate(s);
     }
 
@@ -93,8 +126,8 @@ public class AppointmentDAO implements DAO<Appointment> {
                 "', contact='" + appointment.getContact() +
                 "', type='" + appointment.getType().toString() +
                 "', url='" + appointment.getUrl() +
-                "', start='" + appointment.getStart().format(DateTimeFormatter.ISO_DATE_TIME) +
-                "', end='" + appointment.getEnd().format(DateTimeFormatter.ISO_DATE_TIME) +
+                "', start='" + appointment.getStart().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
+                "', end='" + appointment.getEnd().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
                 "', lastUpdate=now(), lastUpdateBy='" + loggedInUser +
                 "' WHERE appointmentId=" + appointment.getAppointmentId();
         return dbUpdate(s);
@@ -107,8 +140,8 @@ public class AppointmentDAO implements DAO<Appointment> {
     }
 
     @Override
-    public Appointment GetOptionalOrThrow(Optional<Appointment> optionalAppointment) {
-        return optionalAppointment.orElseThrow(() -> new RuntimeException("No appointment contained in Optional<Appointment>"));
+    public Appointment GetOptionalOrThrow(Optional<Appointment> optionalAppointment) throws Exception {
+        return optionalAppointment.orElseThrow(() -> new Exception("No appointment contained in Optional<Appointment>"));
     }
 
     public Appointment lookupAndSetAppointmentId(Appointment newAppointment) {

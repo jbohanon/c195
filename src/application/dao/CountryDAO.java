@@ -1,17 +1,14 @@
 package application.dao;
 
 import application.Main;
-import application.datamodel.Address;
 import application.datamodel.Country;
-import application.ui.ApplicationController;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 import java.util.Optional;
 
-import static application.ui.ApplicationController.loggedInUser;
+import static application.ui.Application.loggedInUser;
 import static application.ui.DialogController.okModalDialog;
 import static application.ui.DialogController.yesNoModalDialog;
 
@@ -94,7 +91,7 @@ public class CountryDAO implements DAO<Country> {
     }
 
     @Override
-    public Country GetOptionalOrThrow(Optional<Country> optionalCountry) {
-        return optionalCountry.orElseThrow(() -> new RuntimeException("No country contained in Optional<Country>"));
+    public Country GetOptionalOrThrow(Optional<Country> optionalCountry) throws Exception {
+        return optionalCountry.orElseThrow(() -> new Exception("No country contained in Optional<Country>"));
     }
 }

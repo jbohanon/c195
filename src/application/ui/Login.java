@@ -12,24 +12,22 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.sql.*;
 import java.util.Locale;
 
-public class LoginController {
+public class Login {
 
     private static final boolean debugMode = true;
 
 //    private static final Locale usingLocale = Localization.getLocale();
 
     // DEBUG LOCALES
-        private static final Locale usingLocale = Locale.US;
-//    private static final Locale usingLocale = Locale.CANADA_FRENCH;
+//        private static final Locale usingLocale = Locale.US;
+    private static final Locale usingLocale = Locale.CANADA_FRENCH;
     @FXML
     private VBox loginVBox;
 
@@ -77,7 +75,7 @@ public class LoginController {
     }
 
     private static void exitApp() {
-        System.out.println("LoginController exitApp() called.");
+        System.out.println("Login exitApp() called.");
         Main.exitApp(); }
 
     public void loginOnKeyPressedHandler(KeyEvent e) {
@@ -96,7 +94,7 @@ public class LoginController {
             logUserLoginAttempt(userText.getText(), true);
             Main.login.close();
 
-            ApplicationController.loggedInUser = userText.getText();
+            Application.loggedInUser = userText.getText();
             Main.app.show();
         }
     }

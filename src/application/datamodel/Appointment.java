@@ -1,15 +1,12 @@
 package application.datamodel;
 
-import application.dao.AppointmentDAO;
-import application.dao.CustomerDAO;
-import application.dao.UserDAO;
-import application.localization.*;
+import application.localization.Localization;
+import application.ui.DialogController;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.EnumSet;
+
+import static application.ui.Application.customerDAO;
+import static application.ui.Application.userDAO;
 
 public class Appointment {
     private int _appointmentId;
@@ -24,14 +21,21 @@ public class Appointment {
     private ZonedDateTime _start;
     private ZonedDateTime _end;
 
-    private static final CustomerDAO customerDAO = new CustomerDAO();
-    private static final UserDAO userDAO = new UserDAO();
-    private static final AppointmentDAO appointmentDAO = new AppointmentDAO();
+//    private static final CustomerDAO customerDAO = new CustomerDAO();
+//    private static final UserDAO userDAO = new UserDAO();
+//    private static final AppointmentDAO appointmentDAO = new AppointmentDAO();
 
-    public Appointment(int appointmentId, int customerId, int userId, String title, String description, String location, String contact, String type, String url, String start, String end) {
+    public Appointment(int appointmentId, int customerId, int userId, String title, String description, String location, String contact, String type, String url, String start/*, String end*/) {
         _appointmentId = appointmentId;
-        _customer = customerDAO.lookup(customerId).orElse(Customer.nullCustomer());
-        _user = userDAO.lookup(userId).orElse(User.nullUser());
+
+        try {
+            _customer = customerDAO.GetOptionalOrThrow(customerDAO.lookup(customerId));
+            _user = userDAO.GetOptionalOrThrow(userDAO.lookup(userId));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            DialogController.okModalDialog(ex.toString());
+        }
+
         _title = title;
         _description = description;
         _location = location;
@@ -39,7 +43,30 @@ public class Appointment {
         _type = apptTypeFromString(type);
         _url = url;
         _start = Localization.getZonedUtcTime(start);
-        _end = Localization.getZonedUtcTime(end);
+        _end = _start.plusHours(1);
+//        _end = Localization.getZonedUtcTime(end);
+    }
+
+    public Appointment(int appointmentId, Customer customer, int userId, String title, String description, String location, String contact, String type, String url, String start/*, String end*/) {
+        _appointmentId = appointmentId;
+        _customer = customer;
+
+        try {
+            _user = userDAO.GetOptionalOrThrow(userDAO.lookup(userId));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            DialogController.okModalDialog(ex.toString());
+        }
+
+        _title = title;
+        _description = description;
+        _location = location;
+        _contact = contact;
+        _type = apptTypeFromString(type);
+        _url = url;
+        _start = Localization.getZonedUtcTime(start);
+        _end = _start.plusHours(1);
+//        _end = Localization.getZonedUtcTime(end);
     }
 
     public Appointment() {
@@ -53,7 +80,8 @@ public class Appointment {
         _type = APPT_TYPE.TYPE_UNKNOWN;
         _url = "Err";
         _start = ZonedDateTime.now();
-        _end = ZonedDateTime.now();
+        _end = _start.plusHours(1);
+//        _end = ZonedDateTime.now();
     }
 
     public int getAppointmentId() {
@@ -134,7 +162,7 @@ public class Appointment {
     }
 
     public enum APPT_TYPE {
-        TYPE_1, TYPE_2, TYPE_3, TYPE_UNKNOWN
+        INTRODUCTION, CONSULT_TAX, CONSULT_INVEST, TYPE_UNKNOWN
     }
 
     public String toString() {
@@ -164,18 +192,18 @@ public class Appointment {
 
     public static String apptTypeToString(APPT_TYPE type) {
         switch (type) {
-            case TYPE_1: return "type_1";
-            case TYPE_2: return "type_2";
-            case TYPE_3: return "type_3";
+            case INTRODUCTION: return "type_1";
+            case CONSULT_TAX: return "type_2";
+            case CONSULT_INVEST: return "type_3";
             default: return "type_unknown";
         }
     }
 
     public static APPT_TYPE apptTypeFromString(String type) {
         switch (type) {
-            case "type_1": return APPT_TYPE.TYPE_1;
-            case "type_2": return APPT_TYPE.TYPE_2;
-            case "type_3": return APPT_TYPE.TYPE_3;
+            case "Introduction": return APPT_TYPE.INTRODUCTION;
+            case "Tax Consultation": return APPT_TYPE.CONSULT_TAX;
+            case "Investment Consultation": return APPT_TYPE.CONSULT_INVEST;
             default: return APPT_TYPE.TYPE_UNKNOWN;
         }
     }

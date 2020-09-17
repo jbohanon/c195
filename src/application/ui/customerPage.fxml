@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <Scene xmlns="http://javafx.com/javafx"
        xmlns:fx="http://javafx.com/fxml"
-       fx:controller="application.ui.CustomerPageController">
+       fx:controller="application.ui.CustomerPage">
     <AnchorPane fx:id="customerPane" layoutX="10.0" layoutY="10.0" prefHeight="442.0" prefWidth="394.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label fx:id="custDetailsLabel" layoutX="14.0" layoutY="14.0" text="Customer Details" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
         <Label fx:id="custNameLabel" alignment="CENTER_RIGHT" layoutX="15.0" layoutY="57.0" prefHeight="27.0" prefWidth="95.0" text="Name" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />

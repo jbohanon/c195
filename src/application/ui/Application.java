@@ -8,7 +8,7 @@ import static application.localization.Localization.*;
 
 import java.util.*;
 
-public class ApplicationController {
+public class Application {
 
     public static String loggedInUser;
 
@@ -40,7 +40,7 @@ public class ApplicationController {
     }
 
     private static String getStr(String propertyLabel) {
-        return getLocalizedString(propertyLabel, RESOURCE_BUNDLE.APP);
+        return getLocalizedString(propertyLabel, RESOURCE_BUNDLE.APPLICATION);
     }
 
 //

@@ -18,7 +18,7 @@ public class UserDAO implements DAO<User> {
     }
 
     public Optional<User> lookup(String userName) {
-        return lookupHelper("SELECT userId, userName, password, active FROM user WHERE userName=" + userName);
+        return lookupHelper("SELECT userId, userName, password, active FROM user WHERE userName='" + userName + "'");
     }
 
     private Optional<User> lookupHelper(String s) {
@@ -63,7 +63,7 @@ public class UserDAO implements DAO<User> {
     }
 
     @Override
-    public User GetOptionalOrThrow(Optional<User> optionalUser) {
-        return optionalUser.orElseThrow(() -> new RuntimeException("No user contained in Optional<User>"));
+    public User GetOptionalOrThrow(Optional<User> optionalUser) throws Exception {
+        return optionalUser.orElseThrow(() -> new Exception("No user contained in Optional<User>"));
     }
 }

@@ -2,42 +2,38 @@
 
 <?import javafx.scene.Scene?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<?import application.ui.TimeField?>
-<Scene xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.AppointmentPageController">
-    <AnchorPane fx:id="apptPane" layoutX="20.0" layoutY="20.0" prefHeight="442.0" prefWidth="394.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<Scene xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.AppointmentPage">
+    <AnchorPane fx:id="apptPane" prefHeight="442.0" prefWidth="394.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label fx:id="apptDetailsLabel" layoutX="14.0" layoutY="14.0" text="Appointment Details" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0" />
         <Label fx:id="apptCustNameLabel" alignment="CENTER_RIGHT" layoutX="15.0" layoutY="57.0" prefHeight="27.0" prefWidth="95.0" text="Customer Name" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="50.0" />
         <TextField fx:id="apptCustNameText" layoutX="119.0" layoutY="52.0" prefWidth="200.0" promptText="Customer Name" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="50.0" />
-        <Label fx:id="apptAssociateNameLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="99.0" prefHeight="27.0" prefWidth="95.0" text="Associate Name" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="85.0" />
-        <TextField fx:id="apptAssociateNameText" layoutX="129.0" layoutY="94.0" prefWidth="200.0" promptText="Associate Name" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="85.0" />
-        <Label fx:id="apptTitleLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="67.0" prefHeight="27.0" prefWidth="95.0" text="Title" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="120.0" />
-        <TextField fx:id="apptTitleText" layoutX="129.0" layoutY="62.0" prefWidth="200.0" promptText="Appointment Title" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="120.0" />
-        <Button fx:id="apptBackBtn" layoutX="48.0" layoutY="194.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="Back" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="75.0" />
-        <Button fx:id="apptEditBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="Edit" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="145.0" />
-        <Button fx:id="apptSaveBtn" layoutX="236.0" layoutY="194.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="Save" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="215.0" />
-        <Button fx:id="apptDiscardBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="Discard" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="145.0" />
-        <Label fx:id="apptDescLabel" alignment="CENTER_RIGHT" layoutX="23.0" layoutY="167.0" prefHeight="27.0" prefWidth="95.0" text="Description" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="155.0" />
-        <TextField fx:id="apptDescText" layoutX="127.0" layoutY="162.0" prefWidth="200.0" promptText="Appointment Description" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="155.0" />
-        <Label fx:id="apptLocationLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="188.0" prefHeight="27.0" prefWidth="95.0" text="Location" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="190.0" />
-        <TextField fx:id="apptLocationText" layoutX="125.0" layoutY="194.0" prefWidth="200.0" promptText="Appointment Location" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="190.0" />
-        <Label fx:id="apptContactLabel" alignment="CENTER_RIGHT" layoutX="35.0" layoutY="198.0" prefHeight="27.0" prefWidth="95.0" text="Contact" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="225.0" />
-        <TextField fx:id="apptContactText" layoutX="135.0" layoutY="204.0" prefWidth="200.0" promptText="Customer Contact" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="225.0" />
-        <Label fx:id="apptUrlLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="262.0" prefHeight="27.0" prefWidth="95.0" text="URL" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="260.0" />
-        <TextField fx:id="apptUrlText" layoutX="125.0" layoutY="268.0" prefWidth="200.0" promptText="Appointment URL" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="260.0" />
-        <RadioButton fx:id="apptType1Radio" layoutX="43.0" layoutY="301.0" mnemonicParsing="false" prefWidth="65.0" text="Type 1" AnchorPane.leftAnchor="60.0" />
-        <RadioButton fx:id="apptType2Radio" layoutX="145.0" layoutY="301.0" mnemonicParsing="false" prefWidth="65.0" text="Type 2" AnchorPane.leftAnchor="140.0" />
-        <RadioButton fx:id="apptType3Radio" layoutX="245.0" layoutY="302.0" mnemonicParsing="false" prefWidth="65.0" text="Type 3" AnchorPane.leftAnchor="220.0" />
-        <DatePicker fx:id="apptStartDatePicker" layoutX="43.0" layoutY="330.0" prefWidth="165.0" promptText="Start Time" AnchorPane.bottomAnchor="85.0" AnchorPane.leftAnchor="25.0" />
-        <DatePicker fx:id="apptEndTimePicker" layoutX="225.0" layoutY="330.0" prefWidth="165.0" promptText="End Time" AnchorPane.bottomAnchor="85.0" AnchorPane.rightAnchor="25.0" />
-      <TimeField fx:id="apptStartTimeField" layoutX="27.0" layoutY="362.0" />
-      <TimeField fx:id="apptEndTimeField" layoutX="209.0" layoutY="362.0" />
+        <Label fx:id="apptTitleLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="67.0" prefHeight="27.0" prefWidth="95.0" text="Title" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="85.0" />
+        <TextField fx:id="apptTitleText" layoutX="129.0" layoutY="62.0" prefWidth="200.0" promptText="Appointment Title" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="85.0" />
+        <Button fx:id="apptBackBtn" layoutX="48.0" layoutY="194.0" mnemonicParsing="false" onAction="#BackBtnHandler" prefHeight="27.0" prefWidth="60.0" text="%back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="75.0" />
+        <Button fx:id="apptEditBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" onAction="#EditBtnHandler" prefHeight="27.0" prefWidth="60.0" text="%edit" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="145.0" />
+        <Button fx:id="apptSaveBtn" layoutX="236.0" layoutY="194.0" mnemonicParsing="false" onAction="#SaveBtnHandler" prefHeight="27.0" prefWidth="60.0" text="%save" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="215.0" />
+        <Button fx:id="apptDiscardBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" onAction="#DiscardBtnHandler" prefHeight="27.0" prefWidth="60.0" text="%discard" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="145.0" />
+        <Button fx:id="apptDeleteBtn" layoutX="325.0" layoutY="10.0" mnemonicParsing="false" onAction="#DeleteBtnHandler" prefHeight="27.0" prefWidth="60.0" style="-fx-background-color: red;" text="%delete" visible="false" AnchorPane.bottomAnchor="405.0" AnchorPane.leftAnchor="325.0" />
+        <Label fx:id="apptDescLabel" alignment="CENTER_RIGHT" layoutX="23.0" layoutY="167.0" prefHeight="27.0" prefWidth="95.0" text="Description" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="120.0" />
+        <TextField fx:id="apptDescText" layoutX="127.0" layoutY="162.0" prefWidth="200.0" promptText="Appointment Description" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="120.0" />
+        <Label fx:id="apptLocationLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="188.0" prefHeight="27.0" prefWidth="95.0" text="Location" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="155.0" />
+        <TextField fx:id="apptLocationText" layoutX="125.0" layoutY="194.0" prefWidth="200.0" promptText="Appointment Location" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="155.0" />
+        <Label fx:id="apptContactLabel" alignment="CENTER_RIGHT" layoutX="35.0" layoutY="198.0" prefHeight="27.0" prefWidth="95.0" text="Contact" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="190.0" />
+        <TextField fx:id="apptContactText" layoutX="135.0" layoutY="204.0" prefWidth="200.0" promptText="Customer Contact" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="190.0" />
+        <Label fx:id="apptUrlLabel" alignment="CENTER_RIGHT" layoutX="25.0" layoutY="262.0" prefHeight="27.0" prefWidth="95.0" text="URL" AnchorPane.leftAnchor="25.0" AnchorPane.topAnchor="225.0" />
+        <TextField fx:id="apptUrlText" layoutX="125.0" layoutY="268.0" prefWidth="200.0" promptText="Appointment URL" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="225.0" />
+        <RadioButton fx:id="apptTypeRadio_Intro" layoutX="125.0" layoutY="261.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="200.0" text="Introduction" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="260.0" />
+        <RadioButton fx:id="apptTypeRadio_Tax" layoutX="125.0" layoutY="310.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="200.0" text="Tax Consultation" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="290.0" />
+        <RadioButton fx:id="apptTypeRadio_Invest" layoutX="125.0" layoutY="330.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="200.0" text="Investment Consultation" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="320.0" />
+        <DatePicker fx:id="apptStartDatePicker" layoutX="43.0" layoutY="330.0" prefWidth="165.0" promptText="%datePickerLabel" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="25.0" />
+        <ComboBox fx:id="apptStartTimeComboBox" layoutX="228.0" layoutY="330.0" prefHeight="27.0" prefWidth="87.0" promptText="%timeComboBox" AnchorPane.bottomAnchor="50.0" />
     </AnchorPane>
 
 </Scene>

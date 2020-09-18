@@ -162,7 +162,29 @@ public class Appointment {
     }
 
     public enum APPT_TYPE {
-        INTRODUCTION, CONSULT_TAX, CONSULT_INVEST, TYPE_UNKNOWN
+        INTRODUCTION {
+            public String getString() {
+                return "Introduction";
+            }
+        }, CONSULT_TAX {
+            public String getString() {
+                return "Tax Consultation";
+            }
+        }, CONSULT_INVEST {
+            public String getString() {
+                return "Investment Consultation";
+            }
+        }, TYPE_UNKNOWN {
+            public String getString() {
+                return "Unknown";
+            }
+        };
+
+        public static String getString(APPT_TYPE type) {
+            return type.getString();
+        }
+
+        public abstract String getString();
     }
 
     public String toString() {
@@ -184,20 +206,20 @@ public class Appointment {
                 _description,
                 _location,
                 _contact,
-                apptTypeToString(_type),
+                _type.getString(),
                 _url,
                 _start.toString(),
                 _end.toString());
     }
 
-    public static String apptTypeToString(APPT_TYPE type) {
-        switch (type) {
-            case INTRODUCTION: return "type_1";
-            case CONSULT_TAX: return "type_2";
-            case CONSULT_INVEST: return "type_3";
-            default: return "type_unknown";
-        }
-    }
+//    public static String apptTypeToString(APPT_TYPE type) {
+//        switch (type) {
+//            case INTRODUCTION: return "type_1";
+//            case CONSULT_TAX: return "type_2";
+//            case CONSULT_INVEST: return "type_3";
+//            default: return "type_unknown";
+//        }
+//    }
 
     public static APPT_TYPE apptTypeFromString(String type) {
         switch (type) {

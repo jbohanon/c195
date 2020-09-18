@@ -24,10 +24,10 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
     
     // FXML Fields
     public Label apptDetailsLabel;
+    public ToggleGroup tg = new ToggleGroup();
     public Label apptCustNameLabel;
     public TextField apptCustNameText;
-//    public Label apptAssociateNameLabel;
-//    public TextField apptAssociateNameText;
+    public Button getCustomerBtn;
     public Label apptTitleLabel;
     public TextField apptTitleText;
     public Button apptBackBtn;
@@ -51,9 +51,13 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
 
     private Appointment _editedAppointment;
     public AnchorPane apptPane;
-    ToggleGroup tg = new ToggleGroup();
 
-    private final ObservableList<String> times = FXCollections.observableArrayList("9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM");
+    // Take list of available times and produce appropriate localized strings
+    private final ObservableList<String> times = FXCollections.observableArrayList(
+            Arrays.stream(new String[]{"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"})
+                    .map(time -> LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"))
+                                    .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)))
+            .toArray(String[]::new));
 
     public AppointmentPage() {
 
@@ -63,9 +67,9 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
     private void initialize() {
         apptStartTimeComboBox.setItems(times);
 
-        apptTypeRadio_Intro.setToggleGroup(tg);
-        apptTypeRadio_Tax.setToggleGroup(tg);
-        apptTypeRadio_Invest.setToggleGroup(tg);
+//        apptTypeRadio_Intro.setToggleGroup(tg);
+//        apptTypeRadio_Tax.setToggleGroup(tg);
+//        apptTypeRadio_Invest.setToggleGroup(tg);
 
         if(DisplayedAppointment == null) {
             return;
@@ -90,15 +94,13 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
         apptContactText.setText(a.getContact());
         apptUrlText.setText(a.getUrl());
         switch(a.getType()) {
-            case INTRODUCTION: apptTypeRadio_Intro.setSelected(true);
-            case CONSULT_TAX: apptTypeRadio_Tax.setSelected(true);
-            case CONSULT_INVEST: apptTypeRadio_Invest.setSelected(true);
+            case INTRODUCTION: apptTypeRadio_Intro.setSelected(true); break;
+            case CONSULT_TAX: apptTypeRadio_Tax.setSelected(true); break;
+            case CONSULT_INVEST: apptTypeRadio_Invest.setSelected(true); break;
+            default: break;
         }
         apptStartDatePicker.setValue(a.getStart().toLocalDate());
-        apptStartTimeComboBox.getSelectionModel().select(a.getStart().toLocalTime().format(DateTimeFormatter.ofPattern("hh:mm a")));
-//        apptStartTimeField.setValue(a.getStart().toLocalTime());
-//        apptEndDatePicker.setValue(a.getEnd().toLocalDate());
-//        apptEndTimeField.setValue(a.getEnd().toLocalTime());
+        apptStartTimeComboBox.getSelectionModel().select(a.getStart().toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
     }
 
     @Override
@@ -195,6 +197,11 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
         }
     }
 
+    @FXML
+    private void GetCustomerBtnHandler() {
+
+    }
+
     private void getCustomerFromField(String custName) {
         ArrayList<Customer> searchRes = customerDAO.search(custName);
         if(searchRes.size() > 1) {
@@ -216,11 +223,11 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
     }
 
     private String getRadioSelectionToString() {
-        return apptTypeRadio_Intro.isSelected() ?
-            Appointment.apptTypeToString(Appointment.APPT_TYPE.INTRODUCTION) :
+        return (apptTypeRadio_Intro.isSelected() ?
+            Appointment.APPT_TYPE.INTRODUCTION.getString() :
             (apptTypeRadio_Tax.isSelected() ?
-                    Appointment.apptTypeToString(Appointment.APPT_TYPE.CONSULT_TAX) :
-                    Appointment.apptTypeToString(Appointment.APPT_TYPE.CONSULT_INVEST));
+                    Appointment.APPT_TYPE.CONSULT_TAX.getString() :
+                    Appointment.APPT_TYPE.CONSULT_INVEST.getString()));
     }
 
     private Appointment createAppointment(int id) throws Exception {

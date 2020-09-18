@@ -108,7 +108,7 @@ public class AppointmentDAO implements DAO<Appointment> {
                 appointment.getDescription() + "', '" +
                 appointment.getLocation() + "', '" +
                 appointment.getContact() + "', '" +
-                appointment.getType().toString() + "', '" +
+                appointment.getType().getString() + "', '" +
                 appointment.getUrl() + "', '" +
                 appointment.getStart().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', '" +
                 appointment.getEnd().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', " +
@@ -124,7 +124,7 @@ public class AppointmentDAO implements DAO<Appointment> {
                 "', description='" + appointment.getDescription() +
                 "', location='" + appointment.getLocation() +
                 "', contact='" + appointment.getContact() +
-                "', type='" + appointment.getType().toString() +
+                "', type='" + appointment.getType().getString() +
                 "', url='" + appointment.getUrl() +
                 "', start='" + appointment.getStart().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
                 "', end='" + appointment.getEnd().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +

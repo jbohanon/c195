@@ -1,6 +1,7 @@
 package application;
 
 import application.dao.Database;
+import application.datamodel.Appointment;
 import application.localization.Localization;
 import application.ui.Application;
 import javafx.application.Platform;
@@ -34,11 +35,15 @@ public class Main extends javafx.application.Application {
 //    private static final Locale usingLocale = Localization.getLocale();
 
     // DEBUG LOCALES
-//        private static final Locale usingLocale = Locale.US;
-    private static final Locale usingLocale = Locale.CANADA_FRENCH;
+        private static final Locale usingLocale = Locale.US;
+//    private static final Locale usingLocale = Locale.CANADA_FRENCH;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        System.out.println(Appointment.APPT_TYPE.INTRODUCTION.getString());
+        System.out.println(Appointment.APPT_TYPE.CONSULT_TAX.getString());
+        System.out.println(Appointment.APPT_TYPE.CONSULT_INVEST.getString());
 
 
         Locale.setDefault(usingLocale);

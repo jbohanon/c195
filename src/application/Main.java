@@ -14,6 +14,20 @@ import java.util.Locale;
 
 import static application.localization.Localization.getLocalizedString;
 
+// TODO Fix appointment search
+// TODO Reports
+// TODO Load user schedule on login
+// TODO Show modal if any appointment within 15 minutes of login
+// TODO Show user schedule in week and month format
+// TODO Validate appointment creation/edit time selection with actually available times
+// TODO Appointment "Go To" customer button
+// TODO Fix localizing time zones / locale styles implementation
+// TODO Prevent scheduling an appointment outside business hours
+// TODO Prevent scheduling overlapping appointments
+// TODO Prevent entering nonexistent or invalid customer data
+// TODO Prevent entering an incorrect username and password
+// TODO Find and comment lambdas
+
 public class Main extends javafx.application.Application {
 
     public static Connection dbConn;

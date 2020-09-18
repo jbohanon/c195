@@ -7,8 +7,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.InputMethodRequests;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -66,6 +69,24 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
     @FXML
     private void initialize() {
         apptStartTimeComboBox.setItems(times);
+        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(final DatePicker dp) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+
+                        if(item.isBefore(LocalDate.now())) {
+                            setDisable(true);
+                            setStyle("-fx-background-color: #EEEEEE;");
+                        }
+                    }
+                };
+            }
+        };
+
+        apptStartDatePicker.setDayCellFactory(dayCellFactory);
 
 //        apptTypeRadio_Intro.setToggleGroup(tg);
 //        apptTypeRadio_Tax.setToggleGroup(tg);

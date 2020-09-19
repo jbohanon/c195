@@ -34,7 +34,7 @@
                      AnchorPane.topAnchor="260.0"/>
         <RadioButton fx:id="apptTypeRadio_Tax" layoutX="125.0" layoutY="310.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="200.0" text="Tax Consultation" toggleGroup="$tg" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="290.0" />
         <RadioButton fx:id="apptTypeRadio_Invest" layoutX="125.0" layoutY="330.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="200.0" text="Investment Consultation" toggleGroup="$tg" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="320.0" />
-        <DatePicker fx:id="apptStartDatePicker" layoutX="43.0" layoutY="330.0" prefWidth="165.0" promptText="Choose Date" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="25.0" />
+        <DatePicker fx:id="apptStartDatePicker" layoutX="43.0" layoutY="330.0" prefWidth="165.0" promptText="Choose Date" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="25.0" onAction="#DateTimeValidation"/>
         <ComboBox fx:id="apptStartTimeComboBox" layoutX="228.0" layoutY="330.0" prefHeight="27.0" prefWidth="139.0" promptText="Choose Time" AnchorPane.bottomAnchor="50.0" />
         <Button fx:id="apptBackBtn" layoutX="48.0" layoutY="194.0" mnemonicParsing="false" onAction="#BackBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Back" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="75.0" />
         <Button fx:id="apptEditBtn" layoutX="144.0" layoutY="194.0" mnemonicParsing="false" onAction="#EditBtnHandler" prefHeight="27.0" prefWidth="60.0" text="Edit" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="145.0" />

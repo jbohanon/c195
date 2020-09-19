@@ -16,7 +16,7 @@ public class CountryDAO implements DAO<Country> {
     @Override
     public Optional<Country> lookup(int id) {
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = "SELECT country FROM country WHERE countryId=" + id;
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
@@ -25,7 +25,7 @@ public class CountryDAO implements DAO<Country> {
                 System.out.println("Found " + c.getCountry());
                 return Optional.of(c);
             }
-        } catch(SQLException ex) {
+        } catch(Exception ex) {
             ex.printStackTrace();
         }
         return Optional.empty();
@@ -33,7 +33,7 @@ public class CountryDAO implements DAO<Country> {
 
     public Optional<Country> lookup(String country) {
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = "SELECT countryId, country FROM country WHERE country=" + country;
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
@@ -42,7 +42,7 @@ public class CountryDAO implements DAO<Country> {
                 System.out.println("Found " + c.getCountry());
                 return Optional.of(c);
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         // Country not found handling

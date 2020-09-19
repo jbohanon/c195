@@ -1,13 +1,8 @@
 package application.datamodel;
 
-import application.localization.Localization;
 import application.ui.DialogController;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.time.temporal.TemporalAccessor;
+import java.time.*;
 import java.util.TimeZone;
 
 import static application.ui.Application.customerDAO;
@@ -23,12 +18,13 @@ public class Appointment {
     private String _contact;
     private APPT_TYPE _type;
     private String _url;
-    private ZonedDateTime _start;
+    private ZonedDateTime _start; // Always UTC
+    private LocalDateTime _startLocal; // Converted to JVM locale and kept handy
     private ZonedDateTime _end;
 
-//    private static final CustomerDAO customerDAO = new CustomerDAO();
-//    private static final UserDAO userDAO = new UserDAO();
-//    private static final AppointmentDAO appointmentDAO = new AppointmentDAO();
+    public static Appointment AppointmentFromDb(int appointmentId, int customerId, int userId, String title, String description, String location, String contact, String type, String url, String start, boolean fromDb) {
+        return new Appointment(appointmentId, customerId, userId, title, description, location, contact, type, url, ZonedDateTime.ofLocal(LocalDateTime.parse(start), ZoneId.of("UTC"), ZoneOffset.UTC).withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalDateTime().toString());
+    }
 
     public Appointment(int appointmentId, int customerId, int userId, String title, String description, String location, String contact, String type, String url, String start/*, String end*/) {
         _appointmentId = appointmentId;
@@ -47,9 +43,10 @@ public class Appointment {
         _contact = contact;
         _type = apptTypeFromString(type);
         _url = url;
-        _start = ZonedDateTime.ofLocal(LocalDateTime.parse(start), TimeZone.getDefault().toZoneId(), ZoneOffset.from(ZonedDateTime.now())); //Localization.getZonedLocalTime(Localization.getZonedUtcTime(start), TimeZone.getDefault().toZoneId());
+        _startLocal = LocalDateTime.parse(start);
+        ZonedDateTime tmp = ZonedDateTime.ofLocal(_startLocal, TimeZone.getDefault().toZoneId(), ZoneOffset.from(ZonedDateTime.now()));
+        _start = tmp.withZoneSameInstant(ZoneId.of("UTC"));
         _end = _start.plusHours(1);
-//        _end = Localization.getZonedUtcTime(end);
     }
 
     public Appointment(int appointmentId, Customer customer, int userId, String title, String description, String location, String contact, String type, String url, String start/*, String end*/) {
@@ -69,9 +66,10 @@ public class Appointment {
         _contact = contact;
         _type = apptTypeFromString(type);
         _url = url;
-        _start = ZonedDateTime.ofLocal(LocalDateTime.parse(start), TimeZone.getDefault().toZoneId(), ZoneOffset.from(ZonedDateTime.now())); //Localization.getZonedLocalTime(Localization.getZonedUtcTime(start), TimeZone.getDefault().toZoneId());
+        _startLocal = LocalDateTime.parse(start);
+        ZonedDateTime tmp = ZonedDateTime.ofLocal(_startLocal, TimeZone.getDefault().toZoneId(), ZoneOffset.from(ZonedDateTime.now()));
+        _start = tmp.withZoneSameInstant(ZoneId.of("UTC"));
         _end = _start.plusHours(1);
-//        _end = Localization.getZonedUtcTime(end);
     }
 
     public Appointment() {
@@ -86,7 +84,6 @@ public class Appointment {
         _url = "Err";
         _start = ZonedDateTime.now();
         _end = _start.plusHours(1);
-//        _end = ZonedDateTime.now();
     }
 
     public int getAppointmentId() {
@@ -158,6 +155,13 @@ public class Appointment {
     public void setStart(ZonedDateTime start) {
         _start = start;
     }
+    public LocalDateTime getStartLocal() {
+        return _startLocal;
+    }
+    public void setStartLocal(LocalDateTime startLocal) {
+        _startLocal = startLocal;
+        _start = startLocal.atZone(TimeZone.getDefault().toZoneId()).withZoneSameInstant(TimeZone.getTimeZone("UTC").toZoneId());
+    }
 
     public ZonedDateTime getEnd() {
         return _end;
@@ -216,15 +220,6 @@ public class Appointment {
                 _start.toString(),
                 _end.toString());
     }
-
-//    public static String apptTypeToString(APPT_TYPE type) {
-//        switch (type) {
-//            case INTRODUCTION: return "type_1";
-//            case CONSULT_TAX: return "type_2";
-//            case CONSULT_INVEST: return "type_3";
-//            default: return "type_unknown";
-//        }
-//    }
 
     public static APPT_TYPE apptTypeFromString(String type) {
         switch (type) {

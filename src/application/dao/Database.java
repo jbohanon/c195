@@ -13,6 +13,9 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class Database {
+
+    private static Connection dbConn = null;
+
     private static MysqlDataSource loadDataSource() {
         MysqlDataSource mysqlDS = null;
         try {
@@ -29,53 +32,38 @@ public class Database {
         }
         return mysqlDS;
     }
-    public static Connection connectToDatabase() {
-        MysqlDataSource ds = loadDataSource();
-        Connection conn;
-        try {
-            conn = ds.getConnection();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-        return conn;
+
+    public static Connection getConnection() {
+        return dbConn;
     }
 
-    public static boolean testDbConn(Connection conn) {
-        ResultSet rs;
-        Statement stmt;
+    public static void connect() throws Exception {
+        makeAndHoldConnection();
+    }
+
+    private static void makeAndHoldConnection() throws Exception {
+        MysqlDataSource ds = loadDataSource();
+
+        dbConn = ds.getConnection();
+
+        while (true) {
+            if (dbConn.isClosed()) {
+                dbConn = ds.getConnection();
+                Thread.sleep(30000);
+            }
+        }
+    }
+
+    public static boolean dbUpdate(String s) {
         try {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery("select * from city");
-            return rs.next();
+            Statement stmt = Database.getConnection().createStatement();
+            System.out.println("Executing " + s);
+            int res = stmt.executeUpdate(s);
+
+            return res > 0;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
         return false;
     }
-
-    public static boolean dbUpdate(String s) {
-        try {
-            Statement stmt = Main.dbConn.createStatement();
-            System.out.println("Executing " + s);
-            int res = stmt.executeUpdate(s);
-
-            return res > 0;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return false;
-    }
-//
-//    protected static ResultSet dbQuery(String s) {
-//        try {
-//            Statement stmt = Main.dbConn.createStatement();
-//            System.out.println("Executing " + s);
-//            return stmt.executeQuery(s);
-//        } catch (SQLException ex) {
-//            ex.printStackTrace();
-//        }
-//        return null;
-//    }
-
 }

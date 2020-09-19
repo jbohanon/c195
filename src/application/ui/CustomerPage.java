@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static application.ui.Application.*;
 import static application.ui.DialogController.okModalDialog;
@@ -17,55 +18,50 @@ public class CustomerPage implements EditablePaneBehavior<Customer> {
     // FXML Fields
     public Label custDetailsLabel;
 
-    public  Label custNameLabel;
+    public Label custNameLabel;
 
     public TextField custNameText;
 
-    public  Label custPhoneLabel;
+    public Label custPhoneLabel;
 
-    public  TextField custPhoneText;
+    public TextField custPhoneText;
 
-    public  Label custAddr1Label;
+    public Label custAddr1Label;
 
-    public  TextField custAddr1Text;
+    public TextField custAddr1Text;
 
     public CheckBox custActiveCheckbox;
 
     public Button custBackBtn;
 
-    public  Button custEditBtn;
+    public Button custEditBtn;
 
-    public  Button custSaveBtn;
+    public Button custSaveBtn;
 
-    public  Button custDiscardBtn;
+    public Button custDiscardBtn;
 
-    public  Label custAddr2Label;
+    public Label custAddr2Label;
 
-    public  TextField custAddr2Text;
+    public TextField custAddr2Text;
 
-    public  Label custCityLabel;
+    public Label custCityLabel;
 
-    public  TextField custCityText;
+    public TextField custCityText;
 
-    public  Label custCountryLabel;
+    public Label custCountryLabel;
 
-    public  TextField custCountryText;
+    public TextField custCountryText;
 
-    public  Label custPostalCodeLabel;
+    public Label custPostalCodeLabel;
 
-    public  TextField custPostalCodeText;
+    public TextField custPostalCodeText;
 
     public Button custDeleteBtn;
 
     private Customer _editedCustomer;
 
-    @Override
-    public void SearchResults() {
-    }
-
     @FXML
     private void initialize() {
-        // TODO localization
         if (DisplayedCustomer != null) {
             PopulatePane(DisplayedCustomer);
         }
@@ -126,8 +122,12 @@ public class CustomerPage implements EditablePaneBehavior<Customer> {
     @Override
     public void SaveBtnHandler() {
 
+        if (!ValidateInput()) {
+            return;
+        }
+
         SetEditable(false);
-        if(DisplayedCustomer == null) {
+        if (DisplayedCustomer == null) {
             Customer newCustomer = new Customer(0,
                     custNameText.getText(),
                     new Address(0,
@@ -140,7 +140,7 @@ public class CustomerPage implements EditablePaneBehavior<Customer> {
                     ),
                     custActiveCheckbox.isSelected());
 
-            if(!customerDAO.insert(newCustomer)) {
+            if (!customerDAO.insert(newCustomer)) {
                 okModalDialog("Issue writing new customer to database.");
                 return;
             }
@@ -160,7 +160,7 @@ public class CustomerPage implements EditablePaneBehavior<Customer> {
                     ),
                     custActiveCheckbox.isSelected());
 
-            if(!customerDAO.update(_editedCustomer)) {
+            if (!customerDAO.update(_editedCustomer)) {
                 okModalDialog("Issue writing edited customer to database.");
                 return;
             }
@@ -171,7 +171,7 @@ public class CustomerPage implements EditablePaneBehavior<Customer> {
 
     @Override
     public void DiscardBtnHandler() {
-        if(DisplayedCustomer == null){
+        if (DisplayedCustomer == null) {
             sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
             return;
         }
@@ -180,8 +180,33 @@ public class CustomerPage implements EditablePaneBehavior<Customer> {
 
     @Override
     public void DeleteBtnHandler() {
-        if(yesNoModalDialog("Delete customer?")) {
+        if (yesNoModalDialog("Delete customer?")) {
             customerDAO.delete(DisplayedCustomer);
+            DisplayedCustomer = null;
+            PageHistoryStack.empty();
+            sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
         }
+    }
+
+    @Override
+    public boolean ValidateInput() {
+        AtomicBoolean valid = new AtomicBoolean(true);
+        Arrays.stream(new TextField[]{
+                custNameText,
+                custPhoneText,
+                custAddr1Text,
+                custAddr2Text,
+                custCityText,
+                custCountryText,
+                custPostalCodeText
+        }).forEach(tb -> {
+            if (tb.getText().equals("")) {
+                tb.setStyle("-fx-text-box-border: #B22222; -fx-focus-color: #B22222;");
+                valid.set(false);
+            } else {
+                tb.setStyle("");
+            }
+        });
+        return valid.get();
     }
 }

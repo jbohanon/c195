@@ -1,7 +1,6 @@
 package application.ui;
 
 public interface EditablePaneBehavior<T> {
-    void SearchResults();
     void PopulatePane(T t);
     void SetEditable(boolean editable);
     void EditBtnHandler();
@@ -9,4 +8,5 @@ public interface EditablePaneBehavior<T> {
     void SaveBtnHandler();
     void DiscardBtnHandler();
     void DeleteBtnHandler();
+    boolean ValidateInput();
 }

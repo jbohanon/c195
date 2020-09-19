@@ -19,7 +19,7 @@ public class AppointmentDAO implements DAO<Appointment> {
     public ArrayList<Appointment> getAllForUser(int userId) {
         ArrayList<Appointment> apptSearchResults = new ArrayList<>();
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = String.format("SELECT appointmentId, customerId, userId, title, description, location, contact, type, url, start, end " +
                     "FROM appointment " +
                     "WHERE userId=%d", userId);
@@ -30,17 +30,37 @@ public class AppointmentDAO implements DAO<Appointment> {
                     apptSearchResults.add(newApptAndPrint(rs));
                 } while (rs.next());
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
         return apptSearchResults;
-
     }
+
+    public ArrayList<Appointment> getAll() {
+        ArrayList<Appointment> apptSearchResults = new ArrayList<>();
+        try {
+            Statement stmt = Database.getConnection().createStatement();
+            String s = "SELECT appointmentId, customerId, userId, title, description, location, contact, type, url, start, end " +
+                    "FROM appointment";
+            System.out.println("Executing " + s);
+            ResultSet rs = stmt.executeQuery(s);
+            if(rs.next()) {
+                do {
+                    apptSearchResults.add(newApptAndPrint(rs));
+                } while (rs.next());
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return apptSearchResults;
+    }
+
     public ArrayList<Appointment> search(String searchTerm) {
         ArrayList<Appointment> apptSearchResults = new ArrayList<>();
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = String.format("SELECT appointmentId, customerId, userId, title, description, location, contact, type, url, start, end FROM appointment WHERE " +
                     "customerId=(SELECT MIN(customerId) FROM customer WHERE customerName LIKE '%%%s%%') OR " +
                     "title LIKE '%%%s%%' OR " +
@@ -56,7 +76,7 @@ public class AppointmentDAO implements DAO<Appointment> {
                     apptSearchResults.add(newApptAndPrint(rs));
                 } while (rs.next());
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
 
@@ -66,14 +86,14 @@ public class AppointmentDAO implements DAO<Appointment> {
     @Override
     public Optional<Appointment> lookup(int id) {
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = "SELECT appointmentId, customerId, userId, title, description, location, contact, type, url, start, end FROM appointment WHERE appointmentId=" + id;
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
             if(rs.next()) {
                 return Optional.of(newApptAndPrint(rs));
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return Optional.empty();
@@ -93,7 +113,7 @@ public class AppointmentDAO implements DAO<Appointment> {
                 appointment.getContact() + "', '" +
                 appointment.getType().getString() + "', '" +
                 appointment.getUrl() + "', '" +
-                appointment.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', '" +
+                appointment.getStart().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', '" +
                 appointment.getEnd().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', " +
                 "now(), '" + loggedInUser + "', now(), '" + loggedInUser + "')";
         return dbUpdate(s);
@@ -109,8 +129,8 @@ public class AppointmentDAO implements DAO<Appointment> {
                 "', contact='" + appointment.getContact() +
                 "', type='" + appointment.getType().getString() +
                 "', url='" + appointment.getUrl() +
-                "', start='" + appointment.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
-                "', end='" + appointment.getEnd().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
+                "', start='" + appointment.getStart().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
+                "', end='" + appointment.getEnd().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
                 "', lastUpdate=now(), lastUpdateBy='" + loggedInUser +
                 "' WHERE appointmentId=" + appointment.getAppointmentId();
         return dbUpdate(s);
@@ -132,7 +152,7 @@ public class AppointmentDAO implements DAO<Appointment> {
     }
 
     private Appointment newApptAndPrint(ResultSet rs) throws SQLException {
-        Appointment a = new Appointment(
+        Appointment a = Appointment.AppointmentFromDb(
                 rs.getInt("appointmentId"),
                 rs.getInt("customerId"),
                 rs.getInt("userId"),
@@ -142,16 +162,15 @@ public class AppointmentDAO implements DAO<Appointment> {
                 rs.getString("contact"),
                 rs.getString("type"),
                 rs.getString("url"),
-                rs.getString("start").replace(' ', 'T')
+                rs.getString("start").replace(' ', 'T'),
+                true
         );
         System.out.println(
                 "Matched appointment with id " +
                         a.getAppointmentId() + ", user " +
                         a.getUser().getUserName() + ", customer " +
                         a.getCustomer().getCustomerName() + ", title " +
-                        a.getTitle() + ", beginning at " +
-                        a.getStart().toLocalDateTime().toString() + " and ending at " +
-                        a.getEnd().toLocalDateTime().toString());
+                        a.getTitle() + ", beginning at " + a.getStartLocal());
 
         return a;
     }

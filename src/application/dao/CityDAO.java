@@ -22,7 +22,7 @@ public class CityDAO implements DAO<City> {
     @Override
     public Optional<City> lookup(int id) {
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = "SELECT city, countryId FROM city WHERE cityId=" + id;
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
@@ -33,7 +33,7 @@ public class CityDAO implements DAO<City> {
                 System.out.println("Found exact match: " + c.getCity() + ", " + c.getCountry());
                 return Optional.of(c);
             } //No add to db option needed when lookup by id fails - indicative of other issue
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return Optional.empty();
@@ -41,7 +41,7 @@ public class CityDAO implements DAO<City> {
 
     public Optional<City> lookup(String city, String countryStr) {
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = "SELECT countryId, city FROM city WHERE city='" + city + "'";
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
@@ -65,7 +65,7 @@ public class CityDAO implements DAO<City> {
                     }
                 }
             }
-        } catch(SQLException ex) {
+        } catch(Exception ex) {
             ex.printStackTrace();
         }
         System.out.println("No city found");

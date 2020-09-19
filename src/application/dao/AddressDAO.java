@@ -14,7 +14,7 @@ public class AddressDAO implements DAO<Address> {
     @Override
     public Optional<Address> lookup(int addressId) {
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = "SELECT addressId, address, address2, cityId, postalCode, phone FROM address WHERE addressId=" + addressId;
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
@@ -36,7 +36,7 @@ public class AddressDAO implements DAO<Address> {
                                 addr.getPhone());
                 return Optional.of(addr);
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return Optional.empty();
@@ -93,13 +93,13 @@ public class AddressDAO implements DAO<Address> {
                 "' AND postalCode='" + a.getPostalCode() +
                 "' AND phone='" + a.getPhone() + "'";
         try{
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
             if(rs.next()) {
                 return rs.getInt("addressId");
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return 0;

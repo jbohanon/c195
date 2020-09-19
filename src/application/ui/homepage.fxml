@@ -14,7 +14,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<Scene xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.Homepage">
+<Scene xmlns="http://javafx.com/javafx/" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ui.Homepage">
     <SplitPane dividerPositions="0.2505567928730512" prefHeight="500.0" prefWidth="600.0">
         <AnchorPane>
             <VBox>
@@ -65,16 +65,16 @@
                </padding>
                 </HBox>
                 <HBox>
-                    <Button fx:id="apptTypesReportBtn" layoutX="11.0" layoutY="277.0" mnemonicParsing="false" text="Appointment Types Report" AnchorPane.bottomAnchor="135.0" />
+                    <Button fx:id="apptTypesReportBtn" layoutX="11.0" layoutY="277.0" mnemonicParsing="false" text="Appointment Types Report" AnchorPane.bottomAnchor="135.0" onAction="#AppointmentTypesReportBtnHandler"/>
                 </HBox>
                 <HBox>
-                    <Button fx:id="schedulesReportBtn" layoutX="36.0" layoutY="304.0" mnemonicParsing="false" text="Schedules Report" AnchorPane.bottomAnchor="100.0" />
+                    <Button fx:id="schedulesReportBtn" layoutX="36.0" layoutY="304.0" mnemonicParsing="false" text="Schedules Report" AnchorPane.bottomAnchor="100.0" onAction="#SchedulesReportBtnHandler"/>
                <padding>
                   <Insets bottom="5.0" top="5.0" />
                </padding>
                 </HBox>
                 <HBox>
-                    <Button fx:id="customersPerConsultantReportBtn" layoutX="1.0" layoutY="331.0" mnemonicParsing="false" prefHeight="25.0" text="Customers / Consultant Report" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="2.5" AnchorPane.rightAnchor="2.5">
+                    <Button fx:id="customersPerConsultantReportBtn" onAction="#CustomersPerConsultantReportBtnHandler" layoutX="1.0" layoutY="331.0" mnemonicParsing="false" prefHeight="25.0" text="Customers / Consultant Report" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="2.5" AnchorPane.rightAnchor="2.5">
 
                         <font>
                             <Font size="12.9" />
@@ -89,7 +89,7 @@
                 </HBox>
             </VBox>
         </AnchorPane>
-        <AnchorPane fx:id="viewApptsPane" prefHeight="442.0" prefWidth="394.0" visible="true">
+        <AnchorPane fx:id="viewApptsPane" prefHeight="442.0" prefWidth="394.0">
             <VBox AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
                 <HBox>
                     <VBox>
@@ -106,7 +106,7 @@
                   </padding>
                     </VBox>
                     <VBox>
-                        <Button fx:id="calViewChangeBtn" alignment="CENTER" mnemonicParsing="false" prefWidth="54.0" text="Month" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
+                        <Button fx:id="calViewChangeBtn" alignment="CENTER" mnemonicParsing="false" prefWidth="54.0" text="Month" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" onAction="#CalViewChangeBtnHandler"/>
                   <padding>
                      <Insets left="25.0" />
                   </padding>
@@ -126,7 +126,7 @@
                     <padding>
                         <Insets top="15.0" />
                     </padding>
-                    <ListView fx:id="calListView" prefWidth="334.0" />
+                    <ListView fx:id="calListView" prefWidth="334.0" onKeyPressed="#CalListViewKeyPressHandler"/>
                 </HBox>
             </VBox>
         </AnchorPane>

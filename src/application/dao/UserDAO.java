@@ -23,7 +23,7 @@ public class UserDAO implements DAO<User> {
 
     private Optional<User> lookupHelper(String s) {
         try{
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
 
@@ -37,7 +37,7 @@ public class UserDAO implements DAO<User> {
                 System.out.println("Found user with userId " + u.getUserId() + " and userName " + u.getUserName());
                 return Optional.of(u);
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return Optional.empty();

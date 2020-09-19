@@ -15,18 +15,16 @@ import static application.ui.Application.loggedInUser;
 import static application.ui.DialogController.okModalDialog;
 
 public class CustomerDAO implements DAO<Customer> {
-//    private final AddressDAO addressDAO = new AddressDAO();
 
     @Override
     public Optional<Customer> lookup(int id) {
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = "SELECT customerName, addressId, active FROM customer WHERE customerId=" + id;
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
             if(rs.next()) {
                 Customer c = new Customer(
-//                        rs.getInt("customerId"),
                         id,
                         rs.getString("customerName"),
                         addressDAO.GetOptionalOrThrow(addressDAO.lookup(rs.getInt("addressId"))),
@@ -48,10 +46,7 @@ public class CustomerDAO implements DAO<Customer> {
             okModalDialog("Issue inserting address.");
             return false;
         }
-        // TODO sketchy address id setting?
-        System.out.println("AddressId before: " + customer.getAddress().getAddressId());
         customer.getAddress().setAddressId(addressDAO.lookupAndSetAddressId(customer.getAddress()));
-        System.out.println("AddressId after: " + customer.getAddress().getAddressId());
         String s = "INSERT INTO customer (customerName, addressId, active, createDate, createdBy, lastUpdate, lastUpdateBy) " +
                 "VALUES ('" + customer.getCustomerName() +
                 "', " + customer.getAddress().getAddressId() +
@@ -96,7 +91,7 @@ public class CustomerDAO implements DAO<Customer> {
     public ArrayList<Customer> search(String name) {
         ArrayList<Customer> custSearchResults = new ArrayList<>();
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             String s = "SELECT customerId, customerName, addressId, active " +
                     "FROM customer " +
                     "WHERE customerName LIKE '%" +
@@ -117,7 +112,7 @@ public class CustomerDAO implements DAO<Customer> {
 
                 } while (rs.next());
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return custSearchResults;
@@ -128,14 +123,14 @@ public class CustomerDAO implements DAO<Customer> {
                 "customerName='" + customer.getCustomerName() +
                 "' AND addressId=" + customer.getAddress().getAddressId();
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
             if(rs.next()) {
                 customer.setCustomerId(rs.getInt("customerId"));
                 System.out.println("Found customer " + customer.getCustomerName() + " with customerId " + customer.getCustomerId());
             }
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         return customer;

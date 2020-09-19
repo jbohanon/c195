@@ -1,6 +1,7 @@
 package application.ui;
 
 import application.Main;
+import application.dao.Database;
 import application.localization.Localization;
 
 import javafx.fxml.FXML;
@@ -80,13 +81,13 @@ public class Login {
 
     private boolean validateCreds() {
         try {
-            Statement stmt = Main.dbConn.createStatement();
+            Statement stmt = Database.getConnection().createStatement();
 
             ResultSet rs = stmt.executeQuery("SELECT password FROM user WHERE userName='" + userText.getText().replace("'", "") + "'");
             if(!rs.next()) {
                 return false;
             } else return rs.getString("password").equals(passText.getText());
-        } catch (SQLException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
             return false;
         }
@@ -113,12 +114,6 @@ public class Login {
         Main.login.close();
 
         loggedInUser = userText.getText();
-        try {
-            usersAppointments = appointmentDAO.getAllForUser(userDAO.GetOptionalOrThrow(userDAO.lookup(loggedInUser)).getUserId());
-        } catch(Exception ex) {
-            ex.printStackTrace();
-            DialogController.okModalDialog("Unable to find any appointments for " + loggedInUser);
-        }
 
         sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
 

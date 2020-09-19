@@ -20,16 +20,20 @@ public class SearchResults {
     @FXML
     private void initialize() {
         searchResultsList.setItems(FXCollections.observableArrayList(SearchResults));
-        // TODO localization
     }
 
     public void SearchResultsListKeyPressHandler(KeyEvent e) {
-        if(e.getCode() == KeyCode.ENTER) {
+        if (e.getCode() == KeyCode.ENTER) {
             switch (SearchType) {
                 case CUST:
-                case CUST_FOR_APPT: CustomerSelected(Localization.RESOURCE_BUNDLE.CUSTOMER_PAGE); break;
-                case APPT: AppointmentSelected(); break;
-                default: CustomerSelected(Localization.RESOURCE_BUNDLE.APPOINTMENT_PAGE);
+                case CUST_FOR_APPT:
+                    CustomerSelected(Localization.RESOURCE_BUNDLE.CUSTOMER_PAGE);
+                    break;
+                case APPT:
+                    AppointmentSelected();
+                    break;
+                default:
+                    CustomerSelected(Localization.RESOURCE_BUNDLE.APPOINTMENT_PAGE);
             }
         }
     }
@@ -41,7 +45,7 @@ public class SearchResults {
 
     private void CustomerSelected(Localization.RESOURCE_BUNDLE nextScene) {
         CustSearchResults.values().forEach(customer -> {
-            if(searchResultsList.getSelectionModel().getSelectedItem().contains(customer.getCustomerName())) {
+            if (searchResultsList.getSelectionModel().getSelectedItem().contains(customer.getCustomerName())) {
                 DisplayedCustomer = customer;
             }
         });
@@ -54,8 +58,8 @@ public class SearchResults {
             String selStr = searchResultsList.getSelectionModel().getSelectedItem();
             if (
                     selStr.contains(appt.getCustomer().getCustomerName()) &&
-                    selStr.contains(appt.getTitle()) &&
-                    selStr.contains(appt.getStart().toString())
+                            selStr.contains(appt.getTitle()) &&
+                            selStr.contains(appt.getStartLocal().toString())
             ) {
                 DisplayedAppointment = appt;
             }

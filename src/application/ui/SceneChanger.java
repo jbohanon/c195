@@ -12,26 +12,15 @@ import java.util.ResourceBundle;
 import static application.ui.Application.PageHistoryStack;
 
 public class SceneChanger {
-
-//    public void ChangeScene(String sceneFxml, String className) {
-//        try {
-//            ResourceBundle languageResource =
-//                ResourceBundle.getBundle(className, Locale.getDefault());
-//            Scene scene = FXMLLoader.load(Main.class.getResource(sceneFxml), languageResource);
-//            Main.app.setScene(scene);
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//            throw new RuntimeException("Failed to load fxml at " + sceneFxml);
-//        }
-//    }
-    public void ChangeScene(Localization.RESOURCE_BUNDLE res) {
+    public void ChangeScene(Localization.RESOURCE_BUNDLE newSceneResource) {
         try {
-            Scene scene = FXMLLoader.load(Main.class.getResource(res.GetFxml()), res.Get());
+            Scene scene = FXMLLoader.load(Main.class.getResource(newSceneResource.GetFxml()), newSceneResource.Get());
             Main.app.setScene(scene);
-            PageHistoryStack.push(res);
+            PageHistoryStack.push(newSceneResource);
+            System.out.println(String.format("%s on top of %d tall stack", PageHistoryStack.peek().toString(), PageHistoryStack.size()));
         } catch (IOException ex) {
             ex.printStackTrace();
-            throw new RuntimeException("Failed to load fxml at " + res.GetFxml());
+            throw new RuntimeException("Failed to load fxml at " + newSceneResource.GetFxml());
         }
     }
 }

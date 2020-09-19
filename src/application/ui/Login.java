@@ -19,6 +19,8 @@ import java.nio.file.StandardOpenOption;
 import java.sql.*;
 import java.util.Locale;
 
+import static application.ui.Application.*;
+
 public class Login {
 
     private static final boolean debugMode = true;
@@ -38,15 +40,9 @@ public class Login {
     @FXML
     private Label badCredsLabel;
 
-    @FXML
-    private Button loginGoBtn;
-
     public void loginGoBtnHandler() {
         attemptLogin();
     }
-
-    @FXML
-    private Button loginExitBtn;
 
     public void loginExitBtnHandler() {
         exitApp();
@@ -57,15 +53,8 @@ public class Login {
         if(debugMode) {
             userText.setText("test");
             passText.setText("test");
-//            attemptLogin();
         }
-//        loginLabel.setText(Localization.getLocalizedString("loginLabel", Localization.RESOURCE_BUNDLE.LOGIN));
         loginLabel.relocate(loginVBox.getLayoutX() + (loginVBox.getWidth()-loginLabel.getWidth())/2, loginLabel.getLayoutY());
-//        userText.setPromptText(Localization.getLocalizedString("userPrompt", Localization.RESOURCE_BUNDLE.LOGIN));
-//        passText.setPromptText(Localization.getLocalizedString("passPrompt", Localization.RESOURCE_BUNDLE.LOGIN));
-//        loginGoBtn.setText(Localization.getLocalizedString("loginGoBtn", Localization.RESOURCE_BUNDLE.LOGIN));
-//        loginExitBtn.setText(Localization.getLocalizedString("loginExitBtn", Localization.RESOURCE_BUNDLE.LOGIN));
-//        badCredsLabel.setText(Localization.getLocalizedString("badCredsLabel", Localization.RESOURCE_BUNDLE.LOGIN));
     }
 
     private static void exitApp() {
@@ -85,17 +74,11 @@ public class Login {
             badCredsLabel.setVisible(true);
         }
         else {
-            logUserLoginAttempt(userText.getText(), true);
-            Main.login.close();
-
-            Application.loggedInUser = userText.getText();
-            Main.app.show();
+            initializeLoggedInUser();
         }
     }
 
     private boolean validateCreds() {
-
-
         try {
             Statement stmt = Main.dbConn.createStatement();
 
@@ -118,15 +101,27 @@ public class Login {
 
         try {
             System.out.println("File created: " + f.createNewFile());
-////            FileWriter fw = new FileWriter(f);
-////            fw.append(s);
-//            BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-//            bw.append(s);
-//            bw.close();
             Files.write(f.toPath(), s.getBytes(), StandardOpenOption.APPEND);
 
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void initializeLoggedInUser() {
+        logUserLoginAttempt(userText.getText(), true);
+        Main.login.close();
+
+        loggedInUser = userText.getText();
+        try {
+            usersAppointments = appointmentDAO.getAllForUser(userDAO.GetOptionalOrThrow(userDAO.lookup(loggedInUser)).getUserId());
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            DialogController.okModalDialog("Unable to find any appointments for " + loggedInUser);
+        }
+
+        sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
+
+        Main.app.show();
     }
 }

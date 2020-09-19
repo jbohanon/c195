@@ -119,7 +119,8 @@ public class CustomerPage implements EditablePaneBehavior<Customer> {
 
     @Override
     public void BackBtnHandler() {
-        sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
+        PageHistoryStack.pop();
+        sceneChanger.ChangeScene(PageHistoryStack.pop());
     }
 
     @Override

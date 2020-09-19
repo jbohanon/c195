@@ -16,7 +16,7 @@
             <HBox alignment="CENTER_LEFT" spacing="140.0">
             <VBox fillWidth="false" spacing="50.0">
                <children>
-                  <Button fx:id="searchResultsBackBtn" mnemonicParsing="false" text="Back" />
+                  <Button fx:id="searchResultsBackBtn" mnemonicParsing="false" text="Back" onAction="#SearchResultsBackBtnHandler"/>
                </children>
                <padding>
                   <Insets right="50.0" />
@@ -24,7 +24,7 @@
             </VBox>
             <VBox alignment="CENTER_RIGHT">
                <children>
-                      <Label fx:id="searchResultsLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Search Results" textAlignment="CENTER">
+                      <Label fx:id="searchResultsLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="Search Results" textAlignment="CENTER" >
                      <font>
                         <Font size="18.0" />
                      </font>

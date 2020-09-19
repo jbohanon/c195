@@ -3,7 +3,12 @@ package application.datamodel;
 import application.localization.Localization;
 import application.ui.DialogController;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAccessor;
+import java.util.TimeZone;
 
 import static application.ui.Application.customerDAO;
 import static application.ui.Application.userDAO;
@@ -42,7 +47,7 @@ public class Appointment {
         _contact = contact;
         _type = apptTypeFromString(type);
         _url = url;
-        _start = Localization.getZonedUtcTime(start);
+        _start = ZonedDateTime.ofLocal(LocalDateTime.parse(start), TimeZone.getDefault().toZoneId(), ZoneOffset.from(ZonedDateTime.now())); //Localization.getZonedLocalTime(Localization.getZonedUtcTime(start), TimeZone.getDefault().toZoneId());
         _end = _start.plusHours(1);
 //        _end = Localization.getZonedUtcTime(end);
     }
@@ -64,7 +69,7 @@ public class Appointment {
         _contact = contact;
         _type = apptTypeFromString(type);
         _url = url;
-        _start = Localization.getZonedUtcTime(start);
+        _start = ZonedDateTime.ofLocal(LocalDateTime.parse(start), TimeZone.getDefault().toZoneId(), ZoneOffset.from(ZonedDateTime.now())); //Localization.getZonedLocalTime(Localization.getZonedUtcTime(start), TimeZone.getDefault().toZoneId());
         _end = _start.plusHours(1);
 //        _end = Localization.getZonedUtcTime(end);
     }

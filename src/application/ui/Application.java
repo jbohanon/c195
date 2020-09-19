@@ -4,6 +4,8 @@ import application.Main;
 import application.dao.*;
 import application.datamodel.Appointment;
 import application.datamodel.Customer;
+import javafx.fxml.FXML;
+
 import static application.localization.Localization.*;
 
 import java.util.*;
@@ -11,6 +13,7 @@ import java.util.*;
 public class Application {
 
     public static String loggedInUser;
+    public static ArrayList<Appointment> usersAppointments = null;
 
     public static AddressDAO addressDAO = new AddressDAO();
     public static AppointmentDAO appointmentDAO = new AppointmentDAO();
@@ -26,7 +29,7 @@ public class Application {
     public static ArrayList<String> SearchResults = new ArrayList<>();
     public static SceneChanger sceneChanger = new SceneChanger();
 
-    public static SEARCH_TYPE searchType = null;
+    public static SEARCH_TYPE SearchType = null;
 
     public static HashMap<String, Customer> CustSearchResults = new HashMap<>();
     public static HashMap<String, Appointment> ApptSearchResults = new HashMap<>();
@@ -35,13 +38,20 @@ public class Application {
         CUST, APPT, CUST_FOR_APPT
     }
 
-    public void exitApp() {
-        Main.exitApp();
+    public static Stack<RESOURCE_BUNDLE> PageHistoryStack = new Stack<>();
+
+    @FXML
+    private void initialize() {
+
     }
 
-    private static String getStr(String propertyLabel) {
-        return getLocalizedString(propertyLabel, RESOURCE_BUNDLE.APPLICATION);
-    }
+//    public void exitApp() {
+//        Main.exitApp();
+//    }
+
+//    private static String getStr(String propertyLabel) {
+//        return getLocalizedString(propertyLabel, RESOURCE_BUNDLE.APPLICATION);
+//    }
 
 //
 //    public void custSearchGoBtnHandler() {

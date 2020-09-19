@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import static application.ui.Application.PageHistoryStack;
+
 public class SceneChanger {
 
 //    public void ChangeScene(String sceneFxml, String className) {
@@ -26,6 +28,7 @@ public class SceneChanger {
         try {
             Scene scene = FXMLLoader.load(Main.class.getResource(res.GetFxml()), res.Get());
             Main.app.setScene(scene);
+            PageHistoryStack.push(res);
         } catch (IOException ex) {
             ex.printStackTrace();
             throw new RuntimeException("Failed to load fxml at " + res.GetFxml());

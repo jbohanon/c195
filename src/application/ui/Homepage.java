@@ -7,9 +7,14 @@ import application.datamodel.Appointment;
 import application.datamodel.Customer;
 import application.localization.Localization;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.time.ZonedDateTime;
+import java.time.chrono.ChronoZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
@@ -33,10 +38,21 @@ public class Homepage {
     public  Button apptTypesReportBtn;
 
     public  Button schedulesReportBtn;
+    public Button calViewChangeBtn;
+    public ListView<String> calListView;
 
     @FXML
     private void initialize() {
         SearchResults.clear();
+        calListView.setItems(FXCollections.observableArrayList(usersAppointments.stream().map(a -> a.getCustomer().getCustomerName() + " - " + a.getTitle() + " - " + a.getStart().withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT))).toArray(String[]::new)));
+        usersAppointments.forEach(a -> {
+            ZonedDateTime start = a.getStart().withZoneSameInstant(TimeZone.getDefault().toZoneId());
+            ZonedDateTime now = ZonedDateTime.now().withZoneSameInstant(TimeZone.getDefault().toZoneId());
+            ZonedDateTime nowPlus15 = now.plusMinutes(15);
+            if (start.isAfter(now) && start.isBefore(nowPlus15)) {
+                DialogController.okModalDialog(String.format("%s appointment with %s at %s", a.getType().getString(), a.getCustomer().getCustomerName(), now.toString()));
+            }
+        });
     }
 
     public void custSearchGoBtnHandler() {
@@ -51,7 +67,7 @@ public class Homepage {
         }
 
         if(_custSearchResults.isEmpty())
-            SearchResults.addAll(FXCollections.observableArrayList(getStr("noResults")));
+            SearchResults.addAll(FXCollections.observableArrayList("No Results"));
         else {
             ArrayList<String> displayResults = new ArrayList<>();
             _custSearchResults.forEach(a -> {
@@ -61,7 +77,7 @@ public class Homepage {
             });
             SearchResults.addAll(displayResults);
         }
-        searchType = SEARCH_TYPE.CUST;
+        SearchType = SEARCH_TYPE.CUST;
         sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.SEARCH_RESULTS);
     }
 
@@ -82,16 +98,16 @@ public class Homepage {
         }
 
         if(_apptSearchResults.isEmpty())
-            SearchResults.addAll(FXCollections.observableArrayList(getStr("noResults")));
+            SearchResults.addAll(FXCollections.observableArrayList("No Results"));
         else {
             ArrayList<String> displayResults = new ArrayList<>();
             _apptSearchResults.forEach(a -> {
-                ApptSearchResults.put(a.getCustomer().getCustomerName() + a.getTitle() + Localization.getZonedLocalTime(a.getStart(), Localization.getLocalTimeZone().toZoneId()), a);
-                displayResults.add(a.getCustomer().getCustomerName() + " - " + a.getTitle() + " - " + Localization.getZonedLocalTime(a.getStart(), TimeZone.getDefault().toZoneId()).toLocalDateTime().toString());
+                ApptSearchResults.put(a.getCustomer().getCustomerName() + a.getTitle() + a.getStart().withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)), a);
+                displayResults.add(a.getCustomer().getCustomerName() + " - " + a.getTitle() + " - " + a.getStart().withZoneSameInstant(TimeZone.getDefault().toZoneId()).toLocalTime().format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)));
             });
             SearchResults.addAll(FXCollections.observableArrayList(displayResults));
         }
-        searchType = SEARCH_TYPE.APPT;
+        SearchType = SEARCH_TYPE.APPT;
         sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.SEARCH_RESULTS);
     }
 

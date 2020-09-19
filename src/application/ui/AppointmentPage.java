@@ -7,9 +7,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.input.InputMethodRequests;
 import javafx.scene.layout.AnchorPane;
-import javafx.util.Callback;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -55,9 +53,9 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
     private Appointment _editedAppointment;
     public AnchorPane apptPane;
 
-    // Take list of available times and produce appropriate localized strings
+    // Stream list of available times and aggregate appropriate localized strings
     private final ObservableList<String> times = FXCollections.observableArrayList(
-            Arrays.stream(new String[]{"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"})
+            Arrays.stream(new String[]{"09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "23:15"})
                     .map(time -> LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"))
                                     .format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)))
             .toArray(String[]::new));
@@ -69,28 +67,23 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
     @FXML
     private void initialize() {
         apptStartTimeComboBox.setItems(times);
-        final Callback<DatePicker, DateCell> dayCellFactory = new Callback<DatePicker, DateCell>() {
+
+        // Lambda used for functional interface java.util.Callback as a factory for day cells
+        apptStartDatePicker.setDayCellFactory((DatePicker datePick) -> new DateCell() {
             @Override
-            public DateCell call(final DatePicker dp) {
-                return new DateCell() {
-                    @Override
-                    public void updateItem(LocalDate item, boolean empty) {
-                        super.updateItem(item, empty);
+            public void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
 
-                        if(item.isBefore(LocalDate.now())) {
-                            setDisable(true);
-                            setStyle("-fx-background-color: #EEEEEE;");
-                        }
-                    }
-                };
+                if(empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else if(item.isBefore(LocalDate.now())) {
+                    setDisable(true);
+                    setStyle("-fx-background-color: #EEEEEE;");
+                }
             }
-        };
-
-        apptStartDatePicker.setDayCellFactory(dayCellFactory);
-
-//        apptTypeRadio_Intro.setToggleGroup(tg);
-//        apptTypeRadio_Tax.setToggleGroup(tg);
-//        apptTypeRadio_Invest.setToggleGroup(tg);
+        }
+        );
 
         if(DisplayedAppointment == null) {
             return;
@@ -108,7 +101,6 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
     public void PopulatePane(Appointment a) {
         SetEditable(false);
         apptCustNameText.setText(a.getCustomer().getCustomerName());
-//        apptAssociateNameText.setText(a.getUser().getUserName());
         apptTitleText.setText(a.getTitle());
         apptDescText.setText(a.getDescription());
         apptLocationText.setText(a.getLocation());
@@ -126,7 +118,7 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
 
     @Override
     public void SetEditable(boolean editable) {
-        // Change data entry controls
+        // Change data entry controls - uses lambda for functional interface java.util.function.Consumer
         Arrays.stream(new Control[]{
                 apptCustNameText,
                 apptTitleText,
@@ -141,13 +133,13 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
                 apptStartTimeComboBox
         }).forEach(control -> control.setDisable(!editable));
 
-        // Change edit screen controls
+        // Change edit screen controls - uses lambda for functional interface java.util.function.Consumer
         Arrays.stream(new Button[]{apptDiscardBtn, apptSaveBtn, apptDeleteBtn}).forEach(control -> {
             control.setDisable(!editable);
             control.setVisible(editable);
         });
 
-        // Change non edit screen controls
+        // Change non edit screen controls - uses lambda for functional interface java.util.function.Consumer
         Arrays.stream(new Button[]{apptEditBtn, apptBackBtn}).forEach(control -> {
             control.setDisable(editable);
             control.setVisible(!editable);
@@ -163,7 +155,8 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
 
     @Override
     public void BackBtnHandler() {
-        sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
+        PageHistoryStack.pop();
+        sceneChanger.ChangeScene(PageHistoryStack.pop());
     }
 
     @Override
@@ -171,7 +164,7 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
         SetEditable(false);
 
         if(DisplayedAppointment == null) {
-            getCustomerFromField(apptCustNameText.getText());
+            getCustomerFromField(apptCustNameText.getText(), SEARCH_TYPE.CUST_FOR_APPT);
             try {
                 Appointment newAppointment = createAppointment(0);
 
@@ -218,25 +211,25 @@ public class AppointmentPage implements EditablePaneBehavior<Appointment> {
         }
     }
 
-    @FXML
-    private void GetCustomerBtnHandler() {
 
+    public void GetCustomerBtnHandler() {
+        getCustomerFromField(apptCustNameText.getText(), SEARCH_TYPE.CUST);
     }
 
-    private void getCustomerFromField(String custName) {
+    private void getCustomerFromField(String custName, SEARCH_TYPE _searchType) {
+        SearchType = _searchType;
         ArrayList<Customer> searchRes = customerDAO.search(custName);
         if(searchRes.size() > 1) {
             ArrayList<String> displayResults = new ArrayList<>();
             searchRes.forEach(a -> {
-                System.out.println("Breaker 1: " + CustSearchResults.size());
                 CustSearchResults.put(a.getCustomerName(), a);
                 displayResults.add(a.getCustomerName() + " - " + a.getAddress().getPhone());
             });
             SearchResults.addAll(displayResults);
-            searchType = SEARCH_TYPE.CUST;
             sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.SEARCH_RESULTS);
         } else if(searchRes.size() == 1) {
             DisplayedCustomer = searchRes.get(0);
+            sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.CUSTOMER_PAGE);
         } else {
             okModalDialog("Customer not found.");
             throw new RuntimeException("Customer not found - could not save appointment");

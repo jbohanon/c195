@@ -126,7 +126,7 @@
                     <padding>
                         <Insets top="15.0" />
                     </padding>
-                    <ListView prefWidth="334.0" />
+                    <ListView fx:id="calListView" prefWidth="334.0" />
                 </HBox>
             </VBox>
         </AnchorPane>

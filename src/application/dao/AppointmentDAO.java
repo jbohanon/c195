@@ -6,6 +6,7 @@ import application.datamodel.Appointment;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -14,6 +15,28 @@ import static application.dao.Database.dbUpdate;
 import static application.ui.Application.loggedInUser;
 
 public class AppointmentDAO implements DAO<Appointment> {
+
+    public ArrayList<Appointment> getAllForUser(int userId) {
+        ArrayList<Appointment> apptSearchResults = new ArrayList<>();
+        try {
+            Statement stmt = Main.dbConn.createStatement();
+            String s = String.format("SELECT appointmentId, customerId, userId, title, description, location, contact, type, url, start, end " +
+                    "FROM appointment " +
+                    "WHERE userId=%d", userId);
+            System.out.println("Executing " + s);
+            ResultSet rs = stmt.executeQuery(s);
+            if(rs.next()) {
+                do {
+                    apptSearchResults.add(newApptAndPrint(rs));
+                } while (rs.next());
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return apptSearchResults;
+
+    }
     public ArrayList<Appointment> search(String searchTerm) {
         ArrayList<Appointment> apptSearchResults = new ArrayList<>();
         try {
@@ -30,27 +53,7 @@ public class AppointmentDAO implements DAO<Appointment> {
             ResultSet rs = stmt.executeQuery(s);
             if(rs.next()) {
                 do {
-                    Appointment a = new Appointment(
-                            rs.getInt("appointmentId"),
-                            rs.getInt("customerId"),
-                            rs.getInt("userId"),
-                            rs.getString("title"),
-                            rs.getString("description"),
-                            rs.getString("location"),
-                            rs.getString("contact"),
-                            rs.getString("type"),
-                            rs.getString("url"),
-                            rs.getString("start").replace(' ', 'T')
-                    );
-                    apptSearchResults.add(a);
-                    System.out.println(
-                            "Matched appointment with id " +
-                                    a.getAppointmentId() + ", user " +
-                                    a.getUser().getUserName() + ", customer " +
-                                    a.getCustomer().getCustomerName() + ", title " +
-                                    a.getTitle() + ", beginning at " +
-                                    a.getStart().toLocalDateTime().toString() + " and ending at " +
-                                    a.getEnd().toLocalDateTime().toString());
+                    apptSearchResults.add(newApptAndPrint(rs));
                 } while (rs.next());
             }
         } catch (SQLException ex) {
@@ -68,27 +71,7 @@ public class AppointmentDAO implements DAO<Appointment> {
             System.out.println("Executing " + s);
             ResultSet rs = stmt.executeQuery(s);
             if(rs.next()) {
-                Appointment a = new Appointment(
-                        rs.getInt("appointmentId"),
-                        rs.getInt("customerId"),
-                        rs.getInt("userId"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getString("location"),
-                        rs.getString("contact"),
-                        rs.getString("type"),
-                        rs.getString("url"),
-                        rs.getString("start")
-                        );
-                System.out.println(
-                        "Matched appointment with id " +
-                                a.getAppointmentId() + ", user " +
-                                a.getUser().getUserName() + ", customer " +
-                                a.getCustomer().getCustomerName() + ", title " +
-                                a.getTitle() + ", beginning at " +
-                                a.getStart().toLocalDateTime().toString() + " and ending at " +
-                                a.getEnd().toLocalDateTime().toString());
-                return Optional.of(a);
+                return Optional.of(newApptAndPrint(rs));
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -110,8 +93,8 @@ public class AppointmentDAO implements DAO<Appointment> {
                 appointment.getContact() + "', '" +
                 appointment.getType().getString() + "', '" +
                 appointment.getUrl() + "', '" +
-                appointment.getStart().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', '" +
-                appointment.getEnd().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', " +
+                appointment.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', '" +
+                appointment.getEnd().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) + "', " +
                 "now(), '" + loggedInUser + "', now(), '" + loggedInUser + "')";
         return dbUpdate(s);
     }
@@ -126,8 +109,8 @@ public class AppointmentDAO implements DAO<Appointment> {
                 "', contact='" + appointment.getContact() +
                 "', type='" + appointment.getType().getString() +
                 "', url='" + appointment.getUrl() +
-                "', start='" + appointment.getStart().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
-                "', end='" + appointment.getEnd().toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
+                "', start='" + appointment.getStart().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
+                "', end='" + appointment.getEnd().withZoneSameInstant(ZoneId.of("UTC")).toLocalDateTime().format(DateTimeFormatter.ISO_DATE_TIME) +
                 "', lastUpdate=now(), lastUpdateBy='" + loggedInUser +
                 "' WHERE appointmentId=" + appointment.getAppointmentId();
         return dbUpdate(s);
@@ -146,5 +129,30 @@ public class AppointmentDAO implements DAO<Appointment> {
 
     public Appointment lookupAndSetAppointmentId(Appointment newAppointment) {
         return Appointment.nullAppt();
+    }
+
+    private Appointment newApptAndPrint(ResultSet rs) throws SQLException {
+        Appointment a = new Appointment(
+                rs.getInt("appointmentId"),
+                rs.getInt("customerId"),
+                rs.getInt("userId"),
+                rs.getString("title"),
+                rs.getString("description"),
+                rs.getString("location"),
+                rs.getString("contact"),
+                rs.getString("type"),
+                rs.getString("url"),
+                rs.getString("start").replace(' ', 'T')
+        );
+        System.out.println(
+                "Matched appointment with id " +
+                        a.getAppointmentId() + ", user " +
+                        a.getUser().getUserName() + ", customer " +
+                        a.getCustomer().getCustomerName() + ", title " +
+                        a.getTitle() + ", beginning at " +
+                        a.getStart().toLocalDateTime().toString() + " and ending at " +
+                        a.getEnd().toLocalDateTime().toString());
+
+        return a;
     }
 }

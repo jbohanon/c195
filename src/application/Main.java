@@ -14,19 +14,18 @@ import java.util.Locale;
 
 import static application.localization.Localization.getLocalizedString;
 
-// TODO Fix appointment search
+// DONE Fix appointment search - time format
 // TODO Reports
-// TODO Load user schedule on login
+// DONE Load user schedule on login
+// TODO Keep appointment time UTC, make field for LocalDateTime in Appointment class
 // TODO Show modal if any appointment within 15 minutes of login
 // TODO Show user schedule in week and month format
-// TODO Validate appointment creation/edit time selection with actually available times
-// TODO Appointment "Go To" customer button
-// TODO Fix localizing time zones / locale styles implementation
-// TODO Prevent scheduling an appointment outside business hours
 // TODO Prevent scheduling overlapping appointments
+// DONE Appointment "Go To" customer button
+// DONE Fix localizing time zones / locale styles implementation
+// DONE Prevent scheduling an appointment outside business hours
 // TODO Prevent entering nonexistent or invalid customer data
-// TODO Prevent entering an incorrect username and password
-// TODO Find and comment lambdas
+// DONE Find and comment lambdas
 
 public class Main extends javafx.application.Application {
 
@@ -45,7 +44,7 @@ public class Main extends javafx.application.Application {
         Platform.exit();
     }
 
-
+    // PRODUCTION LOCALE
 //    private static final Locale usingLocale = Localization.getLocale();
 
     // DEBUG LOCALES
@@ -70,8 +69,6 @@ public class Main extends javafx.application.Application {
 
         app = FXMLLoader.load(getClass().getResource("ui/application.fxml"));
 
-        Application.sceneChanger.ChangeScene(Localization.RESOURCE_BUNDLE.HOMEPAGE);
-
         login = FXMLLoader.load(getClass().getResource("ui/login.fxml"), Localization.RESOURCE_BUNDLE.LOGIN.Get());
         login.show();
     }
@@ -81,7 +78,7 @@ public class Main extends javafx.application.Application {
     }
 
 
-    public static String getStr(String propertyLabel) {
-        return getLocalizedString(propertyLabel, Localization.RESOURCE_BUNDLE.APPLICATION);
-    }
+//    public static String getStr(String propertyLabel) {
+//        return getLocalizedString(propertyLabel, Localization.RESOURCE_BUNDLE.APPLICATION);
+//    }
 }
